@@ -1,5 +1,10 @@
+# Entorno virtual
 venv/
+
+# Archivos temporales de Python
 __pycache__/
 *.pyc
+
+# Cachés de herramientas
 .pytest_cache/
 .mypy_cache/

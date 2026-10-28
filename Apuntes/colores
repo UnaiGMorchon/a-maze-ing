@@ -1,0 +1,28 @@
+
+                           colores
+
+
+# Color Rojo
+
+	print("\033[31m██\033[0m")
+
+Aquí:
+	\033[ inicia la secuencia ANSI.
+	31m establece el color rojo del texto.
+	██ son los caracteres que quieres colorear.
+	\033[0m devuelve el color a su estado normal.
+
+
+# Naranja color determinado
+
+	print("\033[38;2;255;128;0m██\033[0m")
+	
+Aquí:
+	\x1b[ → Inicia el código ANSI.
+	38;2 → Indica que vas a utilizar un color RGB para el texto.
+	255;128;0 → Naranja (rojo 255, verde 128, azul 0).
+	m → Termina la configuración del color.
+	██ → Los caracteres que quieres pintar.
+	\x1b[0m → Restablece el color normal.
+	
+Importante: \x1b y \033 son exactamente lo mismo en Python: dos formas de representar el carácter ESC.

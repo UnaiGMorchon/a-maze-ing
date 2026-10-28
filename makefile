@@ -16,53 +16,81 @@ PYTHON = python3
 # Nombre de la carpeta donde se guardará el entorno virtual.
 # Permite instalar librerías sin afectar al Python global.
 VENV = venv
+PIP = $(VENV)/bin/pip
+RUN = $(VENV)/bin/python
+MAIN = src/main.py
 
 # ------------------------------------------------------------
 # .PHONY
 # ------------------------------------------------------------
 # Indica que estos nombres son comandos, no archivos.
 # Así Make los ejecuta aunque exista un archivo con ese nombre.
-.PHONY: setup install test lint lint-strict format run debug clean
-
-# ------------------------------------------------------------
-# SETUP - Preparar el entorno virtual
-# ------------------------------------------------------------
-# Uso: make setup
-#
-# 1. Crea la carpeta venv con un Python independiente.
-# 2. Actualiza pip dentro de ese entorno.
-#
-# No instala las dependencias del proyecto.
-setup:
-	$(PYTHON) -m venv $(VENV)
-	$(VENV)/bin/pip install --upgrade pip
+.PHONY: install run debug clean lint lint-strict #test
+# test se activará cuando creemos las pruebas.
 
 # ------------------------------------------------------------
 # INSTALL - Instalar las dependencias
 # ------------------------------------------------------------
 # Uso: make install
 #
-# "install: setup" significa que primero ejecuta setup.
-# Después instala las librerías de requirements.txt.
+# Primero crea el entorno virtual si todavía no existe.
+# Después instala las dependencias de requirements.txt.
 #
 # Ejemplo:
 # requirements.txt contiene flake8, mypy, pytest y black.
 #
 # No hace falta ejecutar make setup por separado.
-install: setup
-	$(VENV)/bin/pip install -r requirements.txt
+install:
+	$(PYTHON) -m venv $(VENV)
+	$(PIP) install -r requirements.txt
 
 # ------------------------------------------------------------
-# TEST - Ejecutar las pruebas
+# RUN - Ejecutar el programa
 # ------------------------------------------------------------
-# Uso: make test
+# Uso: make run
 #
-# pytest ejecuta los tests de la carpeta tests/.
-# Sirve para comprobar que las funciones funcionan correctamente.
+# Ejecuta main.py con el Python del entorno virtual.
+# Cambiar la ruta si el archivo principal está en otro lugar.
+run:
+	$(RUN) $(MAIN)
+
+# ------------------------------------------------------------
+# DEBUG - Ejecutar el programa con el depurador
+# ------------------------------------------------------------
+# Uso: make debug
 #
-# "-m pytest" ejecuta pytest utilizando Python del entorno.
-test:
-	$(VENV)/bin/python -m pytest tests/
+# pdb es el depurador integrado de Python.
+# No necesita instalarse mediante pip.
+#
+# Permite detener la ejecución, avanzar paso a paso,
+# entrar en funciones y consultar los valores de variables.
+#
+# Comandos principales dentro de pdb:
+#
+# n          -> Next: ejecuta la siguiente línea sin entrar
+#               dentro de las funciones que se llamen.
+#
+# s          -> Step: avanza y puede entrar dentro de una función.
+#
+# c          -> Continue: continúa hasta el siguiente breakpoint
+#               o hasta que termine el programa.
+#
+# p variable -> Print: muestra el valor de una variable.
+#               Ejemplo: p width
+#
+# l          -> List: muestra el código alrededor de la línea.
+#
+# b 20       -> Breakpoint: establece una parada en la línea 20.
+#
+# q          -> Quit: sale del depurador.
+#
+# Ejemplo:
+# make debug
+# (Pdb) n
+# (Pdb) p width
+# (Pdb) c
+debug:
+	$(RUN) -m pdb $(MAIN)
 
 # ------------------------------------------------------------
 # LINT - Comprobar estilo y tipos (OBLIGATORIO EN EL SUBJECT)
@@ -112,66 +140,6 @@ lint-strict:
 	$(VENV)/bin/mypy . --strict
 
 # ------------------------------------------------------------
-# FORMAT - Formatear el código automáticamente
-# ------------------------------------------------------------
-# Uso: make format
-#
-# Black modifica los archivos para darles un formato uniforme.
-# No comprueba la lógica ni los tipos del programa.
-#
-# IMPORTANTE: puede modificar archivos sin pedir confirmación.
-format:
-	$(VENV)/bin/black src/
-
-# ------------------------------------------------------------
-# RUN - Ejecutar el programa
-# ------------------------------------------------------------
-# Uso: make run
-#
-# Ejecuta main.py con el Python del entorno virtual.
-# Cambiar la ruta si el archivo principal está en otro lugar.
-run:
-	$(VENV)/bin/python src/main.py
-
-# ------------------------------------------------------------
-# DEBUG - Ejecutar el programa con el depurador
-# ------------------------------------------------------------
-# Uso: make debug
-#
-# pdb es el depurador integrado de Python.
-# No necesita instalarse mediante pip.
-#
-# Permite detener la ejecución, avanzar paso a paso,
-# entrar en funciones y consultar los valores de variables.
-#
-# Comandos principales dentro de pdb:
-#
-# n          -> Next: ejecuta la siguiente línea sin entrar
-#               dentro de las funciones que se llamen.
-#
-# s          -> Step: avanza y puede entrar dentro de una función.
-#
-# c          -> Continue: continúa hasta el siguiente breakpoint
-#               o hasta que termine el programa.
-#
-# p variable -> Print: muestra el valor de una variable.
-#               Ejemplo: p width
-#
-# l          -> List: muestra el código alrededor de la línea.
-#
-# b 20       -> Breakpoint: establece una parada en la línea 20.
-#
-# q          -> Quit: sale del depurador.
-#
-# Ejemplo:
-# make debug
-# (Pdb) n
-# (Pdb) p width
-# (Pdb) c
-debug:
-	$(VENV)/bin/python -m pdb src/main.py
-
-# ------------------------------------------------------------
 # CLEAN - Eliminar archivos temporales
 # ------------------------------------------------------------
 # Uso: make clean
@@ -211,3 +179,16 @@ clean:
 	find . \( -path './venv' -o -path './.git' \) -prune -o -type d -name '__pycache__' -prune -exec rm -rf {} +
 	rm -rf .pytest_cache .mypy_cache
 	find . \( -path './venv' -o -path './.git' \) -prune -o -type f -name '*.pyc' -delete
+
+# ------------------------------------------------------------
+# TEST - Ejecutar las pruebas
+# ------------------------------------------------------------
+# Uso: make test
+#
+# Ejecuta las pruebas de la carpeta tests/ utilizando pytest.
+# Sirve para comprobar que el programa funciona correctamente.
+# Incluye pruebas de casos normales y casos extremos.
+#
+# -m pytest ejecuta pytest con el Python del entorno virtual.
+#test:
+#	$(RUN) -m pytest tests/
