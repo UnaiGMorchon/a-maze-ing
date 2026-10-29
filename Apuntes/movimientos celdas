@@ -1,0 +1,5 @@
+Dirección	Condición
+Derecha		x + 1 < width
+Izquierda	x - 1 >= 0
+Abajo		y + 1 < height
+Arriba		y - 1 >= 0
