@@ -18,9 +18,9 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]]) -> None:
         maze_visited.append(maze_bool)  # añades la fila completa a la matriz
 
     initial_cor = config["ENTRY"]
-    maze_visited[initial_cor[0]][initial_cor[1]] = True
-    row = initial_cor[0]
-    column = initial_cor[1]
+    maze_visited[initial_cor[1]][initial_cor[0]] = True
+    column = initial_cor[0]
+    row = initial_cor[1]
 
     while True:
         neighbors: list[str] = []  # lista de vecinos

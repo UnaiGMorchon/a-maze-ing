@@ -2,10 +2,11 @@
 
 from typing import Any
 
-def MazeRender(maze: dict[str, Any]):
+def MazeRender(config: dict[str, Any], maze: list[list[int]]) -> None: 
+    width = config["WIDTH"]
+    height = config["HEIGHT"]
 
     # Dibujo del laberinto.
-
     for row in range(height):  # indica la fila que esta dibujando
         # Dibujamos las paredes NORTE
         
