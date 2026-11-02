@@ -3,7 +3,8 @@
 """Read the maze configuration and draw its outer border."""
 from style import StyleColor
 from typing import Any
-from maze import MazeCreate
+from src.maze_create import MazeCreate
+from src.maze_generator import GeneratorMaze
 
 
 def ReadConfig() -> dict[str, Any]:
@@ -116,4 +117,6 @@ if __name__ == "__main__":
     config = ReadConfig()
     Drawlabyrinth(config)
     ShowPosition(config)
-    MazeCreate(config)
+    MazeCreate()
+    GeneratorMaze(config)
+    MazeRender()

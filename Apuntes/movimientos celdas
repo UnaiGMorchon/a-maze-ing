@@ -3,3 +3,78 @@ Derecha		x + 1 < width
 Izquierda	x - 1 >= 0
 Abajo		y + 1 < height
 Arriba		y - 1 >= 0
+
+
+
+
+maze[3][5] -= 4  # valor 11
+maze[4][5] -= 1  # vlaro 14
+
+
+Ejemplo: una celda con valor 11
+Empezamos por el número más grande:
+1. ¿Cabe el 8 en 11? Sí → oeste cerrada. Nos quedan 3.
+2. ¿Cabe el 4 en 3? No → sur abierta.
+3. ¿Cabe el 2 en 3? Sí → este cerrada. Nos queda 1.
+4. ¿Cabe el 1 en 1? Sí → norte cerrada.
+
+
+                  11 & 4
+
+Significa: «En la habitación 11, ¿está incluida la pared sur, que vale 4?».
+
+
+     10          =          8 + 2
+numero celda     =   suma de sus paredes cerradas
+		
+		
+El truco es este: los números que sumas son las paredes cerradas. Los que faltan son las abiertas.
+
+
+--------------------------------------
+
+        9 & 8  comprueba si existe o no la pared
+Como el 8 forma parte del 9,
+si por lo que esta cerrada la pared oeste 
+
+Resultado 0 → pared abierta.
+Resultado distinto de 0 → pared cerrada.
+
+-------------------------------------
+
+11 & 4:
+
+1011  = 11 celda 11 abierta la puerta sur
+& 0100  = 4  comporbamos SUR "con &"
+______
+0000  = resultado 0
+ 	esta abierta
+
+
+ejemplo:
+
+if 11 & 4:             = 1 (True)
+    print("Cerrada")
+else:                  = 0 (False)
+    print("Abierta") 
+    
+    
+    
+    if i == 1:
+       print(f"{maze[row][column]:^6}", end="")
+    else:
+       print("  " * 3, end="")
+                    
+                    
+    2. ¿Qué hace?
+- if i == 1: muestra el número solamente en la línea central de las tres.
+- maze[row][column]: obtiene el valor de esa celda.
+- :^6: centra el número en un espacio de 6 caracteres.
+- end="": evita que salte de línea antes de terminar de dibujar la fila.
+
+
+
+
+
+
+
