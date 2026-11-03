@@ -7,6 +7,7 @@ from src.maze_create import MazeCreate
 from src.maze_generator import GeneratorMaze
 from src.maze_render import MazeRender
 from src.maze_export import MazeSave
+from src.maze_solve import MazeSolve
 
 
 def ReadConfig() -> dict[str, Any]:
@@ -124,3 +125,4 @@ if __name__ == "__main__":
 
     MazeRender(config, maze, pos42)  # recibe el laberinto y las posiciones del 42 para poder dibujarlo.
     MazeSave(config, maze)
+    MazeSolve(config, maze)
