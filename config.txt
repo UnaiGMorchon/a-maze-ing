@@ -1,7 +1,7 @@
 # Configuration file must contain one ‘KEY:VALUE‘ pair per line
 
-WIDTH=20
-HEIGHT=15
+WIDTH=200
+HEIGHT=150
 ENTRY=0,0
 EXIT=19,14
 OUTPUT_FILE=maze.txt
