@@ -76,5 +76,10 @@ else:                  = 0 (False)
 
 
 
+La diferencia es:
+- pos42[0] → devuelve el primer elemento, (2, 3).
+- (2, 3) in pos42 → devuelve True o False, dependiendo de si encuentra esa tupla.
+
+
 
 

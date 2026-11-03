@@ -52,20 +52,20 @@ def Drawlabyrinth(config: dict[str, Any]) -> None:
 
     # Draw the top border.
     for i in range(width):
-        print(StyleColor.nostromo, end="")
+        print(f"{StyleColor.nostromo}{StyleColor.reset}", end="")
     print()
 
     # Draw the side borders and the empty space between them.
     for i in range(height - 2):
-        print(StyleColor.magratea, end="")
+        print(f"{StyleColor.magratea}{StyleColor.reset}", end="")
 
         for i in range((width *2) - 4):
             print(" ", end="")
-        print(StyleColor.nautilus)
+        print(f"{StyleColor.nautilus}{StyleColor.reset}")
 
     # Draw the bottom border.
     for i in range(width):
-        print(StyleColor.start, end="")
+        print(f"{StyleColor.start}{StyleColor.reset}", end="")
     print()
 
 
@@ -118,6 +118,6 @@ if __name__ == "__main__":
     config = ReadConfig()
     Drawlabyrinth(config)
     ShowPosition(config)
-    maze = MazeCreate(config)
-    GeneratorMaze(config, maze)
-    MazeRender(config, maze)
+    maze = MazeCreate(config)  # crea la matriz del laberinto
+    pos42 = GeneratorMaze(config, maze)  #genera los caminos y devuelve las posiciones del 42, que guardas en pos.
+    MazeRender(config, maze, pos42)  # recibe el laberinto y las posiciones del 42 para poder dibujarlo.

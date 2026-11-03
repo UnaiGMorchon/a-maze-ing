@@ -26,3 +26,10 @@ Aquí:
 	\x1b[0m → Restablece el color normal.
 	
 Importante: \x1b y \033 son exactamente lo mismo en Python: dos formas de representar el carácter ESC.
+
+
+
+Parte				Función
+\033[38;2;0;186;188m		Activa el turquesa
+██				Dibuja dos bloques
+\033[0m				Restablece el color
