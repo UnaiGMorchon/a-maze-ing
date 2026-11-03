@@ -6,6 +6,7 @@ from typing import Any
 from src.maze_create import MazeCreate
 from src.maze_generator import GeneratorMaze
 from src.maze_render import MazeRender
+from src.maze_export import MazeSave
 
 
 def ReadConfig() -> dict[str, Any]:
@@ -45,9 +46,9 @@ def ReadConfig() -> dict[str, Any]:
         return(config_dict)
 
 
-def Drawlabyrinth(config: dict[str, Any]) -> None:
+#def Drawlabyrinth(config: dict[str, Any]) -> None:
     """Draw the outer border using the configured width and height."""
-    width = config["WIDTH"]
+    """ width = config["WIDTH"]
     height = config["HEIGHT"]
 
     # Draw the top border.
@@ -66,10 +67,10 @@ def Drawlabyrinth(config: dict[str, Any]) -> None:
     # Draw the bottom border.
     for i in range(width):
         print(f"{StyleColor.start}{StyleColor.reset}", end="")
-    print()
+    print() """
 
 
-def ShowPosition(config: dict[str, Any]) -> None:
+""" def ShowPosition(config: dict[str, Any]) -> None:
     entry = config["ENTRY"]
     exit_position = config["EXIT"]
 
@@ -109,15 +110,17 @@ def ShowPosition(config: dict[str, Any]) -> None:
         print("exit Y is valid")
     else:
         raise ValueError("exit Y is not valid")
-
+ """
 
 # esto sería también el character chr(0x2588) o ██
 if __name__ == "__main__":
 
     # Load the configuration and draw the labyrinth border.
     config = ReadConfig()
-    Drawlabyrinth(config)
-    ShowPosition(config)
+    #Drawlabyrinth(config)
+    #ShowPosition(config)
     maze = MazeCreate(config)  # crea la matriz del laberinto
     pos42 = GeneratorMaze(config, maze)  #genera los caminos y devuelve las posiciones del 42, que guardas en pos.
+
     MazeRender(config, maze, pos42)  # recibe el laberinto y las posiciones del 42 para poder dibujarlo.
+    MazeSave(config, maze)

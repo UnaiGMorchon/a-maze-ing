@@ -15,5 +15,4 @@ def MazeCreate(config : dict[str, Any]) -> list[list[int]]:
         for i in range(width):
             row.append(15)  # creación de celdas a valor 15 todas
         maze.append(row)
-        ## aqui llamaria al mazerender()
     return(maze)

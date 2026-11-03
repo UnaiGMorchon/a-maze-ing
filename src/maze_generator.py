@@ -4,6 +4,7 @@ import random
 from typing import Any
 from src.style import StyleColor
 
+""" Generador: utilizado DFS para crear los caminos, eliminando paredes. """
 def GeneratorMaze(config: dict[str, Any], maze: list[list[int]]) -> list[tuple[int, int]]:
     width = config["WIDTH"]
     height = config["HEIGHT"]
@@ -18,13 +19,13 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]]) -> list[tuple[i
             maze_bool.append(False)
         maze_visited.append(maze_bool)  # añades la fila completa a la matriz
 
-
     initial_cor = config["ENTRY"]
     maze_visited[initial_cor[1]][initial_cor[0]] = True
     column = initial_cor[0]
     row = initial_cor[1]
 
-    maze_number_42: list[list[int]] = []  # 1º list contiene las filas, 2º list contiene los valores de cada fila. int representa los números 0 y 1.
+    # 1º list contiene las filas, 2º list contiene los valores de cada fila. int representa los números 0 y 1.
+    maze_number_42: list[list[int]] = []
     positions_42: list[tuple[int, int]] = []
     maze_number_42.append([1, 0 ,0, 0, 1, 1, 1])
     maze_number_42.append([1, 0 ,0, 0, 0, 0, 1])
