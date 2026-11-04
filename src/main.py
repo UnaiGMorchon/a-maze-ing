@@ -60,7 +60,7 @@ def ReadConfig() -> dict[str, Any]:
     # Draw the side borders and the empty space between them.
     for i in range(height - 2):
         print(f"{StyleColor.magratea}{StyleColor.reset}", end="")
-
+# Añadir la fila completa a la matriz.
         for i in range((width *2) - 4):
             print(" ", end="")
         print(f"{StyleColor.nautilus}{StyleColor.reset}")
@@ -120,9 +120,16 @@ if __name__ == "__main__":
     config = ReadConfig()
     #Drawlabyrinth(config)
     #ShowPosition(config)
-    maze = MazeCreate(config)  # crea la matriz del laberinto
-    pos42 = GeneratorMaze(config, maze)  #genera los caminos y devuelve las posiciones del 42, que guardas en pos.
 
-    MazeRender(config, maze, pos42)  # recibe el laberinto y las posiciones del 42 para poder dibujarlo.
-    MazeSave(config, maze)
-    MazeSolve(config, maze)
+    # Crear la matriz con todas las paredes cerradas.
+    maze = MazeCreate(config)
+    # Genera los caminos y devuelve las posiciones del 42, que guardas en pos.
+    pos42 = GeneratorMaze(config, maze)
+
+    # MazeRender(config, maze, pos42)  # recibe el laberinto y las posiciones del 42 para poder dibujarlo.
+    # Buscar el camino más corto entre entrada y salida.
+    solve = MazeSolve(config, maze)
+    # Guardar el laberinto y su solución en un archivo
+    MazeSave(config, maze, solve)
+    # Mostrar el laberinto y la solución en la terminal.
+    MazeRender(config, maze, pos42, solve)
