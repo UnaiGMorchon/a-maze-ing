@@ -115,7 +115,6 @@ def ReadConfig() -> dict[str, Any]:
 
 # esto sería también el character chr(0x2588) o ██
 if __name__ == "__main__":
-
     # Load the configuration and draw the labyrinth border.
     config = ReadConfig()
     #Drawlabyrinth(config)
@@ -126,10 +125,9 @@ if __name__ == "__main__":
     # Genera los caminos y devuelve las posiciones del 42, que guardas en pos.
     pos42 = GeneratorMaze(config, maze)
 
-    # MazeRender(config, maze, pos42)  # recibe el laberinto y las posiciones del 42 para poder dibujarlo.
     # Buscar el camino más corto entre entrada y salida.
     solve = MazeSolve(config, maze)
     # Guardar el laberinto y su solución en un archivo
     MazeSave(config, maze, solve)
     # Mostrar el laberinto y la solución en la terminal.
-    MazeRender(config, maze, pos42, solve)
+    MazeRender(config, maze, pos42, solve) # recibe el laberinto y las posiciones del 42 para poder dibujarlo ademas de la solución.

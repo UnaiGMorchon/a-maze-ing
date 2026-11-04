@@ -2,26 +2,6 @@
 
 """Define the colors used to display the labyrinth in the terminal."""
 
-""" USO
-# verde
-print(StyleColor.start)
-# rojo
-print(StyleColor.end)
-# nautilus
-print(StyleColor.nautilus)
-# magratea
-print(StyleColor.magratea)
-# nostromo
-print(StyleColor.nostromo)
-    #print(chr(0x2588) + chr(0x2588))
-    #print("██")
-
- """
-""" # Colores de fondo aclarados un 50 % hacia blanco
-    nautilus_back_half: str = "\033[48;2;128;221;222m"
-    magratea_back_half: str = "\033[48;2;241;213;159m"
-    nostromo_back_half: str = "\033[48;2;207;148;241m" """
-
 class StyleColor():
     """ANSI color codes for the maze."""
 

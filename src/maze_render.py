@@ -11,28 +11,34 @@ def MazeRender(config: dict[str, Any], maze: list[list[int]], pos42: list[tuple[
     exit = config["EXIT"]
 
     # Convertir los movimientos de la solución(solve (ESNWSENW)) en coordenadas.
+    # Celdas que forman el camino.
     draw_line: list[tuple[int, int]] = [(entry[1], entry[0])]
-    draw_north: list[tuple[int, int]] = []
-    draw_west: list[tuple[int, int]] = []
+    draw_north: list[tuple[int, int]] = []  # Pasos verticales entre celdas.
+    draw_west: list[tuple[int, int]] = []  # Pasos horizontales entre celdas.
     
-    row, column = draw_line[0]
+    row, column = draw_line[0]  # Obtener las coordenadas iniciales.
+    # Recorrer los movimientos de la solución.
     for i in solve:
+        # Avanzar hacia el norte.
         if i == "N":
-            row -= 1
-            draw_line.append((row, column))  # actual
-            draw_north.append((row + 1, column))  # anterior
+            row -= 1  # Subir una fila.
+            draw_line.append((row, column))  # Guardar la nueva posición.
+            draw_north.append((row + 1, column))  # Abertura norte de la celda anterior.
+        # Avanzar hacia el sur.
         if i == "S":
-            row +=1
+            row +=1   # Bajar una fila.
             draw_line.append((row, column))
-            draw_north.append((row, column))
+            draw_north.append((row, column))  # Abertura norte de la celda actual.
+        # Avanzar hacia el este.
         if i == "E":
-            column += 1
+            column += 1  # Mover una columna a la derecha.
             draw_line.append((row, column))
-            draw_west.append((row, column))
+            draw_west.append((row, column))  # Abertura oeste de la celda actual.
+        # Avanzar hacia el oeste.
         if i == "W":
-            column -=1
+            column -=1  # Mover una columna a la izquierda.
             draw_line.append((row, column))
-            draw_west.append((row, column + 1))
+            draw_west.append((row, column + 1))  # Abertura oeste de la celda anterior.
 
     # Recorrer las filas del laberinto.
     # Dibujo del laberinto.

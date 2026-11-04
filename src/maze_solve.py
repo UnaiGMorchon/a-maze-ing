@@ -4,11 +4,11 @@ from typing import Any
 
 
 def MazeSolve(config: dict[str, Any], maze: list[list[int]]) -> str:
-    """Busca el camino más corto con el algoritmo BFS."""
+    """Busca el camino más corto con el algoritmo BFS. (FIFO (First In, First Out))"""
     entry = config["ENTRY"]
     exit = config["EXIT"]
 
-    # Convertir coordenadas (x, y) a (fila, columna).
+    # Convertir coordenadas (y, x) a (fila, columna).
     start = (entry[1], entry[0])
     end = (exit[1], exit[0])
 
@@ -28,8 +28,8 @@ def MazeSolve(config: dict[str, Any], maze: list[list[int]]) -> str:
     queue: list[tuple[tuple[int, int], str]] = [(start, "")]  # cola con la posición inicial (start) first in, first out bfs
     # Celdas ya descubiertas
     visited : list[tuple[int, int]]= []  # recuerda las celdas ya descubiertas
-    visited.append(start)  # append agregar
-
+    visited.append(start)  # append agregar la primera posición
+ 
     while queue:
         # Cada celda tiene sus propios vecinos
         neighbours: list[tuple[tuple[int, int], str]] = []  # guarda las celdas vecinas accesibles desde una posición
@@ -49,8 +49,8 @@ def MazeSolve(config: dict[str, Any], maze: list[list[int]]) -> str:
             return (path)
 
         # Comprobar si una pared está abierta y guardamos vecinos
-        if not (maze[row][column] & 2):
-            neighbours.append(((row, column + 1), "E"))  # Guardar los vecinos a los que podemos avanzar.
+        if not (maze[row][column] & 2):  # Guarda las coordenadas del vecino y la dirección.
+            neighbours.append(((row, column + 1), "E"))  # Guardar las coordenadas de los vecinos a los que podemos avanzar + E.
             #print("Podemos avanzar hacia el ESTE")
 
         if not (maze[row][column] & 1):
@@ -66,10 +66,10 @@ def MazeSolve(config: dict[str, Any], maze: list[list[int]]) -> str:
             #print("Podemos avanzar hacia el OESTE")
 
         # Añadir a la cola los vecinos no visitados.
-        for neighbour, direction in neighbours:  # recorrer los vecinos encontrados
+        for neighbour, direction in neighbours:  # recorrer los vecinos encontrados, direcciones
             if neighbour not in visited:  # ¿Este vecino todavía no está en la lista? añade solo los no visitados
-                visited.append(neighbour)  # Celdas que ya hemos descubierto.
-                queue.append((neighbour, path + direction))  # la dejamos pendiente para explorarla después.
+                visited.append(neighbour)  # Marcar el vecino como descubierto.
+                queue.append((neighbour, path + direction))  # Guardar el vecino y su camino para explorarlo después.
 
     # No existe un camino hasta la salida.
     raise ValueError("No se ha encontrado un camino hasta la salida")
