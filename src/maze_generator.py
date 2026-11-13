@@ -5,11 +5,13 @@ from typing import Any
 from src.style import StyleColor
 
 
-def GeneratorMaze(config: dict[str, Any], maze: list[list[int]]) -> list[tuple[int, int]]:
+def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | None = None) -> list[tuple[int, int]]:
     """ Generador: utilizado DFS para crear los caminos, eliminando paredes. """
     width = config["WIDTH"]
     height = config["HEIGHT"]
     stack: list[tuple[int, int]] = []  # posiciones guardadas
+
+    rng = random.Random(seed)  # seed la semilla elegimos 42 por defecto siempre saldra el mismo laberinto
 
     # Crear una matriz para controlar las celdas visitadas.
     maze_visited: list[list[bool]] = []
@@ -74,7 +76,7 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]]) -> list[tuple[i
         # lista de vecinos disponibles neighbors
         if len(neighbors) > 0:  # que tenga al menos 1
             # Elegir un vecino y guardar la posición actual.
-            direction = random.choice(neighbors)  # elige aleatoriamente vecino
+            direction = rng.choice(neighbors)  # elige aleatoriamente vecino
             stack.append((row, column))  # guardo posición antes de avanzar
             # Eliminar las paredes entre las dos celdas.
             if direction == "south":
