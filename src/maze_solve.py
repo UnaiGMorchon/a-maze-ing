@@ -7,6 +7,8 @@ def MazeSolve(config: dict[str, Any], maze: list[list[int]]) -> str:
     """Busca el camino más corto con el algoritmo BFS. (FIFO (First In, First Out))"""
     entry = config["ENTRY"]
     exit = config["EXIT"]
+    width = config["WIDTH"]
+    height = config["HEIGHT"]
 
     # Convertir coordenadas (y, x) a (fila, columna).
     start = (entry[1], entry[0])
@@ -50,20 +52,24 @@ def MazeSolve(config: dict[str, Any], maze: list[list[int]]) -> str:
 
         # Comprobar si una pared está abierta y guardamos vecinos
         if not (maze[row][column] & 2):  # Guarda las coordenadas del vecino y la dirección.
-            neighbours.append(((row, column + 1), "E"))  # Guardar las coordenadas de los vecinos a los que podemos avanzar + E.
+            if column < width -1:
+                neighbours.append(((row, column + 1), "E"))  # Guardar las coordenadas de los vecinos a los que podemos avanzar + E.
             #print("Podemos avanzar hacia el ESTE")
 
         if not (maze[row][column] & 1):
-            neighbours.append(((row - 1, column), "N"))
-            #print("Podemos avanzar hacia el NORTE")
+            if row > 0:
+                neighbours.append(((row - 1, column), "N"))
+                #print("Podemos avanzar hacia el NORTE")
 
         if not (maze[row][column] & 4):
-            neighbours.append(((row + 1, column), "S"))
-            #print("Podemos avanzar hacia el SUR")
+            if row < height -1:
+                neighbours.append(((row + 1, column), "S"))
+                #print("Podemos avanzar hacia el SUR")
 
         if not (maze[row][column] & 8):
-            neighbours.append(((row, column - 1), "W"))
-            #print("Podemos avanzar hacia el OESTE")
+            if column > 0:
+                neighbours.append(((row, column - 1), "W"))
+                #print("Podemos avanzar hacia el OESTE")
 
         # Añadir a la cola los vecinos no visitados.
         for neighbour, direction in neighbours:  # recorrer los vecinos encontrados, direcciones
