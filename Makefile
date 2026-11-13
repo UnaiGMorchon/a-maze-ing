@@ -18,7 +18,7 @@ PYTHON = python3
 VENV = venv
 PIP = $(VENV)/bin/pip
 RUN = $(VENV)/bin/python
-MAIN = src/main.py
+MAIN = src.main
 
 # ------------------------------------------------------------
 # .PHONY
@@ -52,7 +52,7 @@ install:
 # Ejecuta main.py con el Python del entorno virtual.
 # Cambiar la ruta si el archivo principal está en otro lugar.
 run:
-	$(RUN) $(MAIN)
+	$(RUN) -m $(MAIN)
 
 # ------------------------------------------------------------
 # DEBUG - Ejecutar el programa con el depurador
@@ -90,7 +90,7 @@ run:
 # (Pdb) p width
 # (Pdb) c
 debug:
-	$(RUN) -m pdb $(MAIN)
+	$(RUN) -m pdb -m $(MAIN)
 
 # ------------------------------------------------------------
 # LINT - Comprobar estilo y tipos (OBLIGATORIO EN EL SUBJECT)
