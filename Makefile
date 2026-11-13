@@ -178,7 +178,7 @@ lint-strict:
 clean:
 	find . \( -path './venv' -o -path './.git' \) -prune -o -type d -name '__pycache__' -prune -exec rm -rf {} +
 	rm -rf .pytest_cache .mypy_cache
-	find . \( -path './venv' -o -path './.git' \) -prune -o -type f -name '*.pyc' -delete
+	find . \( -path './venv' -o -path './.git' \) -prune -o -type f -name '*.pyc' -exec rm -f {} +
 
 # ------------------------------------------------------------
 # TEST - Ejecutar las pruebas
