@@ -17,16 +17,16 @@ def ReadConfig(filename: str) -> dict[str, Any]:
         config_dict: dict[str, Any] = {}
         for line in config_file:
             # Remove whitespace and ignore comments or empty lines.
-            line = line.strip()
+            line = line.split("#")[0].strip()
 
-            if line.startswith("#") or line == "":
+            if line == "":
                 continue
             # Split each configuration line into a key and a value.
             line_parts = line.split("=")
 
             if len(line_parts) == 2:
-                key = line_parts[0]
-                value = line_parts[1]
+                key = line_parts[0].strip()  # quitamos espacios
+                value = line_parts[1].strip()  # quitamos espacios
 
                 # Convert maze dimensions to integers.
                 if key == "WIDTH" or key == "HEIGHT":
@@ -118,6 +118,11 @@ def ReadConfig(filename: str) -> dict[str, Any]:
 if __name__ == "__main__":
     # Load the configuration and draw the labyrinth border.
     config = ReadConfig(sys.argv[1])
+    #print(type(config["WIDTH"]))
+    #print(type(config["HEIGHT"]))
+    #print(type(config["ENTRY"]))
+    #print(type(config["PERFECT"]))
+
     #Drawlabyrinth(config)
     #ShowPosition(config)
 
