@@ -1,133 +1,59 @@
 #!/usr/bin/env python3
 
-"""Read the maze configuration and draw its outer border."""
-from src.style import StyleColor
+"""Leer la configuración, generar el laberinto y mostrarlo por terminal."""
+import sys
 from typing import Any
 from src.maze_create import MazeCreate
 from src.maze_generator import GeneratorMaze
-from src.maze_render import MazeRender
 from src.maze_export import MazeSave
+from src.maze_render import MazeRender
 from src.maze_solve import MazeSolve
+from src.maze_validate import (
+    MazeConfigError,
+    ParseConfigLines,
+    ValidateArgs,
+    ValidateConfig,
+)
 
 
-def ReadConfig() -> dict[str, Any]:
-    """Read the configuration file and return its values as a dictionary."""
-    with open("config.txt") as config_file:
-        config_dict: dict[str, Any] = {}
-        for line in config_file:
-            # Remove whitespace and ignore comments or empty lines.
-            line = line.strip()
+def ReadConfig(path: str) -> dict[str, Any]:
+    """Leer el archivo de configuración y devolver sus valores ya validados."""
+    try:
+        with open(path, encoding="utf-8") as config_file:
+            lines = config_file.readlines()
+    except OSError as error:
+        raise MazeConfigError(
+            f"no se puede leer el archivo de configuración '{path}': {error}"
+        ) from error
 
-            if line.startswith("#") or line == "":
-                continue
-            # Split each configuration line into a key and a value.
-            line_parts = line.split("=")
-
-            if len(line_parts) == 2:
-                key = line_parts[0]
-                value = line_parts[1]
-
-                # Convert maze dimensions to integers.
-                if key == "WIDTH" or key == "HEIGHT":
-                    value = int(value)
-
-                # Convert the PERFECT setting to a boolean.
-                if key == "PERFECT":
-                    value = value == "True"
-
-                # Convert entry and exit coordinates to integer tuples.
-                if key == "ENTRY" or key == "EXIT":
-                    coordinates = value.split(",")
-                    x_coordinate = int(coordinates[0])
-                    y_coordinate = int(coordinates[1])
-                    coodenates_position: tuple[int, int] = (x_coordinate, y_coordinate)
-                    value = coodenates_position
-                # Store the converted value in the configuration dictionary.
-                config_dict[key] = value
-        return(config_dict)
+    raw = ParseConfigLines(lines)
+    return ValidateConfig(raw)
 
 
-#def Drawlabyrinth(config: dict[str, Any]) -> None:
-    """Draw the outer border using the configured width and height."""
-    """ width = config["WIDTH"]
-    height = config["HEIGHT"]
+def Run(argv: list[str]) -> int:
+    """Ejecutar el programa completo y devolver el código de salida."""
+    try:
+        config_path = ValidateArgs(argv)
+        config = ReadConfig(config_path)
 
-    # Draw the top border.
-    for i in range(width):
-        print(f"{StyleColor.nostromo}{StyleColor.reset}", end="")
-    print()
+        # Crear la matriz con todas las paredes cerradas.
+        maze = MazeCreate(config)
+        # Genera los caminos y devuelve las posiciones del 42.
+        pos42 = GeneratorMaze(config, maze)
+        # Buscar el camino más corto entre entrada y salida.
+        solve = MazeSolve(config, maze)
+        # Guardar el laberinto y su solución en un archivo.
+        MazeSave(config, maze, solve)
+        # Mostrar el laberinto y la solución en la terminal.
+        MazeRender(config, maze, pos42, solve)
+    except (MazeConfigError, ValueError) as error:
+        print(f"Error: {error}", file=sys.stderr)
+        return 1
+    except Exception as error:  # red de seguridad: nunca cerrar sin avisar
+        print(f"Error inesperado: {error}", file=sys.stderr)
+        return 1
+    return 0
 
-    # Draw the side borders and the empty space between them.
-    for i in range(height - 2):
-        print(f"{StyleColor.magratea}{StyleColor.reset}", end="")
-# Añadir la fila completa a la matriz.
-        for i in range((width *2) - 4):
-            print(" ", end="")
-        print(f"{StyleColor.nautilus}{StyleColor.reset}")
 
-    # Draw the bottom border.
-    for i in range(width):
-        print(f"{StyleColor.start}{StyleColor.reset}", end="")
-    print() """
-
-
-""" def ShowPosition(config: dict[str, Any]) -> None:
-    entry = config["ENTRY"]
-    exit_position = config["EXIT"]
-
-    width = config["WIDTH"]
-    height = config["HEIGHT"]
-
-    print("Entry X:", entry[0])
-    print("Entry Y:", entry[1])
-    print("Exit X:", exit_position[0])
-    print("Exit Y:", exit_position[1])
-
-    if width <= 0:
-        raise ValueError("Width must be greater than zero")
-
-    if height <= 0:
-        raise ValueError("Height must be greater than zero")
-
-    if entry == exit_position:
-        raise ValueError("Entry and exit cannot have the same coordinates")
-
-    if entry[0] >= 0 and entry[0] < width:
-        print("entry X is valid")
-    else:
-        raise ValueError("entry X is not valid")
-
-    if entry[1] >= 0 and entry[1] < height:
-        print("entry Y is valid")
-    else:
-        raise ValueError("entry Y is not valid")
-
-    if exit_position[0] >= 0 and exit_position[0] < width:
-        print("exit X is valid")
-    else:
-        raise ValueError("exit x is not valid")
-
-    if exit_position[1] >= 0 and exit_position[1] < height:
-        print("exit Y is valid")
-    else:
-        raise ValueError("exit Y is not valid")
- """
-
-# esto sería también el character chr(0x2588) o ██
 if __name__ == "__main__":
-    # Load the configuration and draw the labyrinth border.
-    config = ReadConfig()
-    #Drawlabyrinth(config)
-    #ShowPosition(config)
-
-    # Crear la matriz con todas las paredes cerradas.
-    maze = MazeCreate(config)
-    # Genera los caminos y devuelve las posiciones del 42, que guardas en pos.
-    pos42 = GeneratorMaze(config, maze)
-
-    # Buscar el camino más corto entre entrada y salida.
-    solve = MazeSolve(config, maze)
-    # Guardar el laberinto y su solución en un archivo
-    MazeSave(config, maze, solve)
-    # Mostrar el laberinto y la solución en la terminal.
-    MazeRender(config, maze, pos42, solve) # recibe el laberinto y las posiciones del 42 para poder dibujarlo ademas de la solución.
+    sys.exit(Run(sys.argv))
