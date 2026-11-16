@@ -3,7 +3,7 @@
 from typing import Any
 from src.style import StyleColor
 
-def MazeRender(config: dict[str, Any], maze: list[list[int]], pos42: list[tuple[int, int]], solve: str) -> None:
+def MazeRender(config: dict[str, Any], maze: list[list[int]], pos42: list[tuple[int, int]], solve: str, show_solution: bool = True) -> None:
     """Dibuja el laberinto y su solución en la terminal."""
     width = config["WIDTH"]
     height = config["HEIGHT"]
@@ -12,33 +12,35 @@ def MazeRender(config: dict[str, Any], maze: list[list[int]], pos42: list[tuple[
 
     # Convertir los movimientos de la solución(solve (ESNWSENW)) en coordenadas.
     # Celdas que forman el camino.
-    draw_line: list[tuple[int, int]] = [(entry[1], entry[0])]
+    draw_line: list[tuple[int, int]] = []
     draw_north: list[tuple[int, int]] = []  # Pasos verticales entre celdas.
     draw_west: list[tuple[int, int]] = []  # Pasos horizontales entre celdas.
-    
-    row, column = draw_line[0]  # Obtener las coordenadas iniciales.
-    # Recorrer los movimientos de la solución.
-    for i in solve:
-        # Avanzar hacia el norte.
-        if i == "N":
-            row -= 1  # Subir una fila.
-            draw_line.append((row, column))  # Guardar la nueva posición.
-            draw_north.append((row + 1, column))  # Abertura norte de la celda anterior.
-        # Avanzar hacia el sur.
-        if i == "S":
-            row +=1   # Bajar una fila.
-            draw_line.append((row, column))
-            draw_north.append((row, column))  # Abertura norte de la celda actual.
-        # Avanzar hacia el este.
-        if i == "E":
-            column += 1  # Mover una columna a la derecha.
-            draw_line.append((row, column))
-            draw_west.append((row, column))  # Abertura oeste de la celda actual.
-        # Avanzar hacia el oeste.
-        if i == "W":
-            column -=1  # Mover una columna a la izquierda.
-            draw_line.append((row, column))
-            draw_west.append((row, column + 1))  # Abertura oeste de la celda anterior.
+
+    if show_solution:
+        draw_line.append((entry[1], entry[0]))
+        row, column = draw_line[0]  # Obtener las coordenadas iniciales.
+        # Recorrer los movimientos de la solución.
+        for i in solve:
+            # Avanzar hacia el norte.
+            if i == "N":
+                row -= 1  # Subir una fila.
+                draw_line.append((row, column))  # Guardar la nueva posición.
+                draw_north.append((row + 1, column))  # Abertura norte de la celda anterior.
+            # Avanzar hacia el sur.
+            if i == "S":
+                row +=1   # Bajar una fila.
+                draw_line.append((row, column))
+                draw_north.append((row, column))  # Abertura norte de la celda actual.
+            # Avanzar hacia el este.
+            if i == "E":
+                column += 1  # Mover una columna a la derecha.
+                draw_line.append((row, column))
+                draw_west.append((row, column))  # Abertura oeste de la celda actual.
+            # Avanzar hacia el oeste.
+            if i == "W":
+                column -=1  # Mover una columna a la izquierda.
+                draw_line.append((row, column))
+                draw_west.append((row, column + 1))  # Abertura oeste de la celda anterior.
 
     # Recorrer las filas del laberinto.
     # Dibujo del laberinto.
@@ -91,8 +93,8 @@ def MazeRender(config: dict[str, Any], maze: list[list[int]], pos42: list[tuple[
                 # dibujo de la linea
                 elif (row, column) in draw_line:
                     print(f"{StyleColor.solve}{"██"}{StyleColor.reset}", end="")
-                #elif i == 0:
-                #    print(f"{StyleColor.background}{maze[row][column]:^2}{StyleColor.reset}", end="")
+                elif i == 0:
+                    print(f"{StyleColor.background}{maze[row][column]:^2}{StyleColor.reset}", end="")
                 else:
                     print(f"{StyleColor.background}{"  " * 1}{StyleColor.reset}", end="")
 

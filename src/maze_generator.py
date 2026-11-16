@@ -44,16 +44,19 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | Non
     start_row = (height - len(maze_number_42)) // 2
     start_column = (width - len(maze_number_42[0])) // 2
 
-    # Reservar las celdas que forman el 42.
-    for row1 in range(len(maze_number_42)):
-        # Recorrer las columnas de cada fila.
-        for column1 in range(len(maze_number_42[0])):
-            # Comprobar si la celda forma parte del 42.
-            if maze_number_42[row1][column1] == 1:
-                # Marcar la celda como visitada para que DFS no la utilice.
-                maze_visited[start_row + row1][start_column + column1] = True
-                # Guardar las coordenadas del 42 dentro del laberinto.
-                positions_42.append((start_row + row1, start_column + column1))
+    if len(maze_visited) < len(maze_number_42) or width < len(maze_number_42[0]):
+        print("42 doesn't fit, so generate the maze without that pattern.")
+    else:
+        # Reservar las celdas que forman el 42.
+        for row1 in range(len(maze_number_42)):
+            # Recorrer las columnas de cada fila.
+            for column1 in range(len(maze_number_42[0])):
+                # Comprobar si la celda forma parte del 42.
+                if maze_number_42[row1][column1] == 1:
+                    # Marcar la celda como visitada para que DFS no la utilice.
+                    maze_visited[start_row + row1][start_column + column1] = True
+                    # Guardar las coordenadas del 42 dentro del laberinto.
+                    positions_42.append((start_row + row1, start_column + column1))
 
     # Explorar celdas mediante DFS.
     while True:
@@ -105,6 +108,13 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | Non
                 row, column = stack.pop()  # recupero posición de stack,elimino de la pila y actuaizo row y column
             else:
                 break  # cuando no quedan vecinos ni posiciones pendientes
+    count = 0
+    for row in maze_visited:
+        for i in row:
+            if not i:
+                count += 1
+    print("Celdas sin visitar:", count)
+
     # Devolver las posiciones que forman el 42.
     return (positions_42)
 

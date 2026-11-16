@@ -122,12 +122,12 @@ if __name__ == "__main__":
 
     # Crear la matriz con todas las paredes cerradas.
     maze = MazeCreate(config)
-    # Genera los caminos y devuelve las posiciones del 42, que guardas en pos.
-    pos42 = GeneratorMaze(config, maze)
+    # Genera los caminos y devuelve las posiciones del 42, que guardas en pos. y semilla
+    pos42 = GeneratorMaze(config, maze, 42)
 
     # Buscar el camino más corto entre entrada y salida.
     solve = MazeSolve(config, maze)
     # Guardar el laberinto y su solución en un archivo
     MazeSave(config, maze, solve)
     # Mostrar el laberinto y la solución en la terminal.
-    MazeRender(config, maze, pos42, solve) # recibe el laberinto y las posiciones del 42 para poder dibujarlo ademas de la solución.
+    MazeRender(config, maze, pos42, solve, False) # recibe el laberinto y las posiciones del 42 para poder dibujarlo ademas de la solución.
