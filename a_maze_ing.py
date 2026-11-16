@@ -9,6 +9,7 @@ from src.maze_generator import GeneratorMaze
 from src.maze_render import MazeRender
 from src.maze_export import MazeSave
 from src.maze_solve import MazeSolve
+from src.maze_animation import MazeAnimation
 
 
 def ReadConfig(filename: str) -> dict[str, Any]:
@@ -145,7 +146,8 @@ if __name__ == "__main__":
         print("1. Re-generate a new maze")
         print("2. Show / Hide the shortest path")
         print("3. Rotate the wall colours")
-        print("4. Quit")
+        print("4. Animation solve")
+        print("5. Quit")
         choice = input("choice? (1-4): ")
         if choice == "1":
             maze = MazeCreate(config)
@@ -174,5 +176,7 @@ if __name__ == "__main__":
                 color_index = 0
             MazeRender(config, maze, pos42, solve, show_solution)
         elif choice == "4":
+            MazeAnimation(config, maze, pos42, solve)
+        elif choice == "5":
             break
             
