@@ -130,4 +130,4 @@ if __name__ == "__main__":
     # Guardar el laberinto y su solución en un archivo
     MazeSave(config, maze, solve)
     # Mostrar el laberinto y la solución en la terminal.
-    MazeRender(config, maze, pos42, solve, False) # recibe el laberinto y las posiciones del 42 para poder dibujarlo ademas de la solución.
+    MazeRender(config, maze, pos42, solve, True) # recibe el laberinto y las posiciones del 42 para poder dibujarlo ademas de la solución.

@@ -18,7 +18,7 @@ PYTHON = python3
 VENV = venv
 PIP = $(VENV)/bin/pip
 RUN = $(VENV)/bin/python
-MAIN = src.main
+MAIN = a_maze_ing
 
 # ------------------------------------------------------------
 # .PHONY
