@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 """Read the maze configuration and draw its outer border."""
+import sys
 from src.style import StyleColor
 from typing import Any
 from src.maze_create import MazeCreate
@@ -10,9 +11,9 @@ from src.maze_export import MazeSave
 from src.maze_solve import MazeSolve
 
 
-def ReadConfig() -> dict[str, Any]:
+def ReadConfig(filename: str) -> dict[str, Any]:
     """Read the configuration file and return its values as a dictionary."""
-    with open("config.txt") as config_file:
+    with open(filename) as config_file:
         config_dict: dict[str, Any] = {}
         for line in config_file:
             # Remove whitespace and ignore comments or empty lines.
@@ -116,7 +117,7 @@ def ReadConfig() -> dict[str, Any]:
 # esto sería también el character chr(0x2588) o ██
 if __name__ == "__main__":
     # Load the configuration and draw the labyrinth border.
-    config = ReadConfig()
+    config = ReadConfig(sys.argv[1])
     #Drawlabyrinth(config)
     #ShowPosition(config)
 
