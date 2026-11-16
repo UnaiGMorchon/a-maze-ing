@@ -1,0 +1,134 @@
+DOCTRINGS
+
+
+
+Las docstrings van en cuatro sitios, y cada una responde a una pregunta distinta:
+
+Dónde					Qué debe contar
+Módulo (primera línea del .py)		Qué contiene el fichero y para qué sirve
+Paquete (en el __init__.py)		Qué es el proyecto y qué módulos lo forman
+Clase (bajo la línea class)		Qué representa, sus atributos y su uso típico
+Función o método (bajo el def)		Qué hace, qué recibe, qué devuelve y qué puede fallar
+
+
+---------------------  Google Style      ----------------------------
+                               
+>>>>>>>>>>>>> Para las funciones:
+
+def function_name(param: int) -> bool:
+    """Explain what the function does.
+
+    Args:
+        param: Explain the parameter.
+
+    Returns:
+        Explain the returned value.
+
+    Raises:
+        ValueError: Explain when this error occurs.
+    """      
+                   
+>>>>>>>>>>>>> Para las clases:
+
+class Maze:
+    """Represent a maze.
+
+    Attributes:
+        width: Width of the maze.
+        height: Height of the maze.
+    """
+                                   
+Por ejemplo:
+
+def solve_maze(maze: list, start: tuple) -> bool:
+    """Solve a maze from a starting position.
+
+    Args:
+        maze: The maze to solve.
+        start: The starting coordinates.
+
+    Returns:
+        True if a solution is found, False otherwise.
+    """
+    # Aquí iría el algoritmo
+    return False
+
+
+1. Primera línea: qué hace la función.
+2. Args: qué parámetros recibe.
+3. Returns: qué devuelve.
+4. Raises: qué errores puede lanzar (solo si corresponde).
+
+Sección			Pregunta
+Primera línea		¿Qué hace?
+Args			¿Qué recibe?
+Returns			¿Qué devuelve?
+Raises			¿Qué errores lanza?
+Attributes		¿Qué atributos tiene la clase?
+
+
+---------------------  Estilo NumPy      ----------------------------
+
+"""
+    Parameters
+    ----------
+    tareas : list[Tarea]
+        Coleccion de tareas a filtrar.
+    campo : str
+        Nombre del atributo, por ejemplo "responsable".
+
+    Returns
+    -------
+    list[Tarea]
+        Las tareas que cumplen la condicion.
+    """
+
+----------  Estilo reStructuredText (Sphinx clasico)  -------------------
+
+   """
+    :param tareas: Coleccion de tareas a filtrar.
+    :returns: Las tareas que cumplen la condicion.
+    """
+
+
+
+help() nos permite consultar qué hace una función, qué parámetros recibe y qué devuelve, según su firma y documentación.
+
+ejemplo:
+
+def solve_maze(maze: list) -> bool:
+    """Check if a maze has a solution."""
+    return True
+
+con help() — Muestra la documentación
+
+ >>>>> help(solve_maze)
+
+Python mostrará algo parecido a esto:
+
+Help on function solve_maze:
+
+solve_maze(maze: list) -> bool
+    Check if a maze has a solution.
+    
+    
+Con __doc__ — Accede directamente al docstring
+__doc__ es un atributo especial de Python que contiene el docstring de la función.
+    
+  >>>> print(solve_maze.__doc__)  
+  
+  resultado
+  
+  Check if a maze has a solution.
+  
+  
+  
+  
+  
+    
+    
+    
+
+
+
+
