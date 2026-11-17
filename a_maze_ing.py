@@ -30,7 +30,7 @@ def ReadConfig(filename: str) -> dict[str, Any]:
                 value = line_parts[1].strip()  # quitamos espacios
 
                 # Convert maze dimensions to integers.
-                if key == "WIDTH" or key == "HEIGHT":
+                if key == "WIDTH" or key == "HEIGHT" or key == "SEED":
                     value = int(value)
 
                 # Convert the PERFECT setting to a boolean.
@@ -119,6 +119,10 @@ def ReadConfig(filename: str) -> dict[str, Any]:
 if __name__ == "__main__":
     # Load the configuration and draw the labyrinth border.
     config = ReadConfig(sys.argv[1])
+    seed = config.get("SEED")
+    #print(config["PERFECT"])
+    #print(type(config["PERFECT"]))
+
     #print(type(config["WIDTH"]))
     #print(type(config["HEIGHT"]))
     #print(type(config["ENTRY"]))
@@ -129,8 +133,11 @@ if __name__ == "__main__":
 
     # Crear la matriz con todas las paredes cerradas.
     maze = MazeCreate(config)
+    print("SEED:", seed)
+    print("TIPO:", type(seed))
+
     # Genera los caminos y devuelve las posiciones del 42, que guardas en pos. y semilla
-    pos42 = GeneratorMaze(config, maze, 42)
+    pos42 = GeneratorMaze(config, maze, seed, False)
 
     # Buscar el camino más corto entre entrada y salida.
     solve = MazeSolve(config, maze)
@@ -146,12 +153,13 @@ if __name__ == "__main__":
         print("1. Re-generate a new maze")
         print("2. Show / Hide the shortest path")
         print("3. Rotate the wall colours")
-        print("4. Animation solve")
-        print("5. Quit")
-        choice = input("choice? (1-5): ")
+        print("4. Animation maze")
+        print("5. Animation solve")
+        print("6. Quit")
+        choice = input("choice? (1-6): ")
         if choice == "1":
             maze = MazeCreate(config)
-            pos42 = GeneratorMaze(config, maze)
+            pos42 = GeneratorMaze(config, maze, seed, False)
             solve = MazeSolve(config, maze)
             MazeSave(config, maze, solve)
             MazeRender(config, maze, pos42, solve, show_solution)
@@ -176,7 +184,13 @@ if __name__ == "__main__":
                 color_index = 0
             MazeRender(config, maze, pos42, solve, show_solution)
         elif choice == "4":
-            MazeAnimation(config, maze, pos42, solve)
+            maze = MazeCreate(config)
+            pos42 = GeneratorMaze(config, maze, seed, True)
+            solve = MazeSolve(config, maze)
+            MazeSave(config, maze, solve)
+            MazeRender(config, maze, pos42, solve, show_solution)
         elif choice == "5":
+            MazeAnimation(config, maze, pos42, solve)
+        elif choice == "6":
             break
             
