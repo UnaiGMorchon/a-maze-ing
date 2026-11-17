@@ -1,8 +1,9 @@
 # Configuration file must contain one ‘KEY:VALUE‘ pair per line # 50 x 40
 
-WIDTH=20
-HEIGHT=15
-ENTRY=0,0
-EXIT=19,14
+WIDTH=5
+HEIGHT=5
+ENTRY=0,0  # 9,5 es parte del numero 42 falla
+EXIT=4,4
 OUTPUT_FILE=maze.txt
 PERFECT=True
+#SEED=42

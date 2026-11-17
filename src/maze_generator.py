@@ -3,9 +3,11 @@
 import random
 from typing import Any
 from src.style import StyleColor
+from src.maze_render import MazeRender
+import time
 
 
-def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | None = None) -> list[tuple[int, int]]:
+def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | None = None, maze_animation: bool = False) -> list[tuple[int, int]]:
     """ Generador: utilizado DFS para crear los caminos, eliminando paredes. """
     width = config["WIDTH"]
     height = config["HEIGHT"]
@@ -44,16 +46,19 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | Non
     start_row = (height - len(maze_number_42)) // 2
     start_column = (width - len(maze_number_42[0])) // 2
 
-    # Reservar las celdas que forman el 42.
-    for row1 in range(len(maze_number_42)):
-        # Recorrer las columnas de cada fila.
-        for column1 in range(len(maze_number_42[0])):
-            # Comprobar si la celda forma parte del 42.
-            if maze_number_42[row1][column1] == 1:
-                # Marcar la celda como visitada para que DFS no la utilice.
-                maze_visited[start_row + row1][start_column + column1] = True
-                # Guardar las coordenadas del 42 dentro del laberinto.
-                positions_42.append((start_row + row1, start_column + column1))
+    if len(maze_visited) < len(maze_number_42) or width < len(maze_number_42[0]):
+        print("42 doesn't fit, so generate the maze without that pattern.")
+    else:
+        # Reservar las celdas que forman el 42.
+        for row1 in range(len(maze_number_42)):
+            # Recorrer las columnas de cada fila.
+            for column1 in range(len(maze_number_42[0])):
+                # Comprobar si la celda forma parte del 42.
+                if maze_number_42[row1][column1] == 1:
+                    # Marcar la celda como visitada para que DFS no la utilice.
+                    maze_visited[start_row + row1][start_column + column1] = True
+                    # Guardar las coordenadas del 42 dentro del laberinto.
+                    positions_42.append((start_row + row1, start_column + column1))
 
     # Explorar celdas mediante DFS.
     while True:
@@ -99,12 +104,24 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | Non
                 column -= 1  # Avanzar una columna a la izquierda.
                 maze[row][column] -= 2  # Eliminar la pared este de la nueva celda.
                 maze_visited[row][column] = True
+            # Animacion de crear laberinto
+            if maze_animation:
+                print("\033[H\033[J", end="")  # limpio teminal
+                MazeRender(config, maze, positions_42, "", False)
+                time.sleep(0.05)  # lapso de tiempo
         else:
             # Retroceder si no quedan vecinos disponibles.
             if len(stack) > 0:
                 row, column = stack.pop()  # recupero posición de stack,elimino de la pila y actuaizo row y column
             else:
                 break  # cuando no quedan vecinos ni posiciones pendientes
+    count = 0
+    for row in maze_visited:
+        for i in row:
+            if not i:
+                count += 1
+    print("Celdas sin visitar:", count)
+
     # Devolver las posiciones que forman el 42.
     return (positions_42)
 
