@@ -10,6 +10,7 @@ from src.maze_render import MazeRender
 from src.maze_export import MazeSave
 from src.maze_solve import MazeSolve
 from src.maze_animation import MazeAnimation
+
 from src.maze_validate import (
     MazeConfigError,
     ParseConfigLines,
@@ -18,105 +19,44 @@ from src.maze_validate import (
 )
 
 
-def ReadConfig(filename: str) -> dict[str, Any]:
-    """Read the configuration file and return its values as a dictionary."""
+def ReadConfig(path: str) -> dict[str, Any]:
+    """Leer el archivo de configuración y devolver sus valores ya validados."""
     try:
-        with open(filename, encoding="utf-8") as config_file:
+        with open(path, encoding="utf-8") as config_file:
             lines = config_file.readlines()
     except OSError as error:
         raise MazeConfigError(
-            f"no se puede leer el archivo de configuración "
-            f"'{filename}': {error}"
+            f"no se puede leer el archivo de configuración '{path}': {error}"
         ) from error
 
     raw = ParseConfigLines(lines)
     return ValidateConfig(raw)
 
 
-# esto sería también el character chr(0x2588) o ██
-if __name__ == "__main__":
+def Run(argv: list[str]) -> int:
+    """Ejecutar el programa completo y devolver el código de salida."""
     try:
-        # Load the configuration and draw the labyrinth border.
-        config_path = ValidateArgs(sys.argv)
+        config_path = ValidateArgs(argv)
         config = ReadConfig(config_path)
-        seed = config.get("SEED")
-        #print(config["PERFECT"])
-        #print(type(config["PERFECT"]))
-
-        #print(type(config["WIDTH"]))
-        #print(type(config["HEIGHT"]))
-        #print(type(config["ENTRY"]))
-        #print(type(config["PERFECT"]))
-
-        #Drawlabyrinth(config)
-        #ShowPosition(config)
 
         # Crear la matriz con todas las paredes cerradas.
         maze = MazeCreate(config)
-        print("SEED:", seed)
-        print("TIPO:", type(seed))
-
-        # Genera los caminos y devuelve las posiciones del 42, que guardas en pos. y semilla
-        pos42 = GeneratorMaze(config, maze, seed, False)
-
+        # Genera los caminos y devuelve las posiciones del 42.
+        pos42 = GeneratorMaze(config, maze)
         # Buscar el camino más corto entre entrada y salida.
         solve = MazeSolve(config, maze)
-        # Guardar el laberinto y su solución en un archivo
+        # Guardar el laberinto y su solución en un archivo.
         MazeSave(config, maze, solve)
         # Mostrar el laberinto y la solución en la terminal.
-        MazeRender(config, maze, pos42, solve, True) # recibe el laberinto y las posiciones del 42 para poder dibujarlo ademas de la solución.
+        MazeRender(config, maze, pos42, solve)
     except (MazeConfigError, ValueError) as error:
         print(f"Error: {error}", file=sys.stderr)
-        sys.exit(1)
+        return 1
     except Exception as error:  # red de seguridad: nunca cerrar sin avisar
         print(f"Error inesperado: {error}", file=sys.stderr)
-        sys.exit(1)
+        return 1
+    return 0
 
-    show_solution= True
-    color_index = 1
 
-    while True:
-        print("1. Re-generate a new maze")
-        print("2. Show / Hide the shortest path")
-        print("3. Rotate the wall colours")
-        print("4. Animation maze")
-        print("5. Animation solve")
-        print("6. Quit")
-        choice = input("choice? (1-6): ")
-        if choice == "1":
-            maze = MazeCreate(config)
-            pos42 = GeneratorMaze(config, maze, seed, False)
-            solve = MazeSolve(config, maze)
-            MazeSave(config, maze, solve)
-            MazeRender(config, maze, pos42, solve, show_solution)
-        elif choice == "2":
-            show_solution = not show_solution
-            MazeRender(config, maze, pos42, solve, show_solution)
-        elif choice == "3":
-            if color_index == 0:
-                StyleColor.wall = StyleColor.nautilus
-                StyleColor.background = StyleColor.nautilus_back_half
-                StyleColor.number_42 = StyleColor.nautilus_dark
-                color_index += 1
-            elif color_index == 1:
-                StyleColor.wall = StyleColor.magratea
-                StyleColor.background = StyleColor.magratea_back_half
-                StyleColor.number_42 = StyleColor.magratea_dark
-                color_index += 1
-            elif color_index == 2:
-                StyleColor.wall = StyleColor.nostromo
-                StyleColor.background = StyleColor.nostromo_back_half
-                StyleColor.number_42 = StyleColor.nostromo_dark
-                color_index = 0
-            MazeRender(config, maze, pos42, solve, show_solution)
-        elif choice == "4":
-            maze = MazeCreate(config)
-            pos42 = GeneratorMaze(config, maze, seed, True)
-            solve = MazeSolve(config, maze)
-            MazeSave(config, maze, solve)
-            MazeRender(config, maze, pos42, solve, show_solution)
-        elif choice == "5":
-            MazeAnimation(config, maze, pos42, solve)
-        elif choice == "6":
-            break
-            
+if __name__ == "__main__":
+    sys.exit(Run(sys.argv))
