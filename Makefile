@@ -18,6 +18,7 @@ PYTHON = python3
 VENV = venv
 PIP = $(VENV)/bin/pip
 RUN = $(VENV)/bin/python
+CONFIG = config.txt
 MAIN = a_maze_ing
 
 # ------------------------------------------------------------
@@ -52,7 +53,7 @@ install:
 # Ejecuta main.py con el Python del entorno virtual.
 # Cambiar la ruta si el archivo principal está en otro lugar.
 run:
-	$(RUN) -m $(MAIN)
+	$(RUN) -m $(MAIN) $(CONFIG)
 
 # ------------------------------------------------------------
 # DEBUG - Ejecutar el programa con el depurador
