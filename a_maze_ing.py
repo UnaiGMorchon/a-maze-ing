@@ -148,7 +148,7 @@ if __name__ == "__main__":
         print("3. Rotate the wall colours")
         print("4. Animation solve")
         print("5. Quit")
-        choice = input("choice? (1-4): ")
+        choice = input("choice? (1-5): ")
         if choice == "1":
             maze = MazeCreate(config)
             pos42 = GeneratorMaze(config, maze)
