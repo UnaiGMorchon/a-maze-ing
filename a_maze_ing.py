@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
-
-"""Leer la configuración, generar el laberinto y mostrarlo por terminal."""
+"""Read the maze configuration and draw its outer border."""
 import sys
+from src.style import StyleColor
 from typing import Any
 from src.maze_create import MazeCreate
 from src.maze_generator import GeneratorMaze
-from src.maze_export import MazeSave
 from src.maze_render import MazeRender
+from src.maze_export import MazeSave
 from src.maze_solve import MazeSolve
+from src.maze_animation import MazeAnimation
 
 from src.maze_validate import (
     MazeConfigError,
@@ -16,6 +17,7 @@ from src.maze_validate import (
     ValidateArgs,
     ValidateConfig,
 )
+
 
 def ReadConfig(path: str) -> dict[str, Any]:
     """Leer el archivo de configuración y devolver sus valores ya validados."""

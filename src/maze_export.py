@@ -5,9 +5,7 @@ from typing import Any
 from src.maze_validate import MazeConfigError
 
 
-def MazeSave(
-    config: dict[str, Any], maze: list[list[int]], solve: str
-) -> None:
+def MazeSave(config: dict[str, Any], maze: list[list[int]], solve: str) -> None:
     """Guarda el laberinto y su solución en un archivo."""
     output_file = config["OUTPUT_FILE"]
     entry = config["ENTRY"]

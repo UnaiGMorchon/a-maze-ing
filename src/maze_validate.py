@@ -25,14 +25,17 @@ def ValidateArgs(argv: list[str]) -> str:
 
 
 def ParseConfigLines(lines: list[str]) -> dict[str, str]:
-    """Convertir las líneas del archivo en un diccionario KEY -> VALUE."""
+    """Convertir las líneas del archivo en un diccionario KEY -> VALUE.
+
+    Acepta comentarios al final de línea (todo lo que vaya tras un '#'
+    se ignora).
+    """
     raw: dict[str, str] = {}
 
     for number, raw_line in enumerate(lines, start=1):
-        line = raw_line.strip()
+        line = raw_line.split("#", 1)[0].strip()
 
-        # Ignorar comentarios y líneas vacías.
-        if line == "" or line.startswith("#"):
+        if line == "":
             continue
 
         # Cada línea debe tener exactamente un signo '='.
@@ -88,7 +91,16 @@ def ValidateConfig(raw: dict[str, str]) -> dict[str, Any]:
 
     config["OUTPUT_FILE"] = raw["OUTPUT_FILE"]
 
-    # Conservar cualquier clave adicional no reconocida, tal cual.
+    # SEED es opcional; si está presente debe ser un entero.
+    if "SEED" in raw:
+        try:
+            config["SEED"] = int(raw["SEED"])
+        except ValueError:
+            raise MazeConfigError(
+                f"SEED debe ser un número entero (recibido {raw['SEED']!r})"
+            )
+
+    # Conservar cualquier otra clave adicional no reconocida, tal cual.
     for key, value in raw.items():
         if key not in config:
             config[key] = value
