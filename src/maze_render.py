@@ -71,7 +71,6 @@ def MazeRender(config: dict[str, Any], maze: list[list[int]], pos42: list[tuple[
         for i in range(1):
             # Segunda pasada: paredes verticales e interior
             for column in range(width):
-
                 # Dibujar la pared o el paso OESTE.
                 if (row, column) in pos42:
                     print(f"{StyleColor.number_42}{"██"}{StyleColor.reset}", end="")
@@ -93,8 +92,8 @@ def MazeRender(config: dict[str, Any], maze: list[list[int]], pos42: list[tuple[
                 # dibujo de la linea
                 elif (row, column) in draw_line:
                     print(f"{StyleColor.solve}{"██"}{StyleColor.reset}", end="")
-                elif i == 0:
-                    print(f"{StyleColor.background}{maze[row][column]:^2}{StyleColor.reset}", end="")
+                #elif i == 0:
+                #    print(f"{StyleColor.background}{maze[row][column]:^2}{StyleColor.reset}", end="")
                 else:
                     print(f"{StyleColor.background}{"  " * 1}{StyleColor.reset}", end="")
 

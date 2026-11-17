@@ -3,9 +3,11 @@
 import random
 from typing import Any
 from src.style import StyleColor
+from src.maze_render import MazeRender
+import time
 
 
-def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | None = None) -> list[tuple[int, int]]:
+def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | None = None, maze_animation: bool = False) -> list[tuple[int, int]]:
     """ Generador: utilizado DFS para crear los caminos, eliminando paredes. """
     width = config["WIDTH"]
     height = config["HEIGHT"]
@@ -102,6 +104,11 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | Non
                 column -= 1  # Avanzar una columna a la izquierda.
                 maze[row][column] -= 2  # Eliminar la pared este de la nueva celda.
                 maze_visited[row][column] = True
+            # Animacion de crear laberinto
+            if maze_animation:
+                print("\033[H\033[J", end="")  # limpio teminal
+                MazeRender(config, maze, positions_42, "", False)
+                time.sleep(0.05)  # lapso de tiempo
         else:
             # Retroceder si no quedan vecinos disponibles.
             if len(stack) > 0:
