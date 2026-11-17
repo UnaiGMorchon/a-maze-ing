@@ -8,6 +8,7 @@ def MazeSave(config: dict[str, Any], maze: list[list[int]], solve: str) -> None:
     entry = config["ENTRY"]
     exit = config["EXIT"]
 
+
     # Abrir el archivo en modo escritura.
     with open(output_file, "w", encoding="utf-8") as file:
         # Guardar cada fila del laberinto en hexadecimal.
@@ -22,7 +23,3 @@ def MazeSave(config: dict[str, Any], maze: list[list[int]], solve: str) -> None:
         file.write(f"{exit[0]},{exit[1]}\n")
         # Guardar los movimientos de la solución.
         file.write(f"{solve}\n")
-
-
-
-
