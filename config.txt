@@ -6,3 +6,4 @@ ENTRY=0,0  # 9,5 es parte del numero 42 falla
 EXIT=19,14
 OUTPUT_FILE=maze.txt
 PERFECT=True
+#SEED=42
