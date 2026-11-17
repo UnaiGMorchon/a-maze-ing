@@ -25,13 +25,17 @@ def ValidateArgs(argv: list[str]) -> str:
 
 
 def ParseConfigLines(lines: list[str]) -> dict[str, str]:
-    """Convertir las líneas del archivo en un diccionario KEY -> VALUE."""
+    """Convertir las líneas del archivo en un diccionario KEY -> VALUE.
+
+    Acepta comentarios al final de línea (todo lo que vaya tras un '#'
+    se ignora).
+    """
     raw: dict[str, str] = {}
 
     for number, raw_line in enumerate(lines, start=1):
         line = raw_line.split("#", 1)[0].strip()
 
-        # Ignorar comentarios y líneas vacías.
+
         if line == "":
             continue
 
