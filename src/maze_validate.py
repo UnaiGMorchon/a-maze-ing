@@ -35,10 +35,8 @@ def ParseConfigLines(lines: list[str]) -> dict[str, str]:
     for number, raw_line in enumerate(lines, start=1):
         line = raw_line.split("#", 1)[0].strip()
 
-
         if line == "":
             continue
-
 
         # Cada línea debe tener exactamente un signo '='.
         if line.count("=") != 1:
@@ -53,7 +51,7 @@ def ParseConfigLines(lines: list[str]) -> dict[str, str]:
                 f"línea {number} del config mal formada: "
                 "clave o valor vacío"
             )
-        raw[key] = value
+        raw[key.upper()] = value
 
     return raw
 
@@ -83,6 +81,12 @@ def ValidateConfig(raw: dict[str, str]) -> dict[str, Any]:
         raise MazeConfigError(
             "el laberinto es demasiado pequeño para tener "
             "ENTRY y EXIT distintos"
+        )
+
+    if width > 25:
+        raise MazeConfigError(
+            f"Ancho del laberinto supera el maximo de 25"
+            f" (recibido {width})"
         )
 
     config["ENTRY"] = _ValidateCoordinate(raw["ENTRY"], "ENTRY", width, height)

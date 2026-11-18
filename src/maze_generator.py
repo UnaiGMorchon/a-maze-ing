@@ -46,7 +46,7 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | Non
     start_row = (height - len(maze_number_42)) // 2
     start_column = (width - len(maze_number_42[0])) // 2
 
-    if len(maze_visited) < len(maze_number_42) or width < len(maze_number_42[0]):
+    if len(maze_visited) < len(maze_number_42) or width < 9:
         print("42 doesn't fit, so generate the maze without that pattern.")
     else:
         # Reservar las celdas que forman el 42.
