@@ -156,4 +156,14 @@ def MazeImperfect(
             if (row, col) not in blocked and maze[row][col] in (7, 11, 13, 14):
                 dead_ends.append((row, col))
 
-    
+    walls: list[tuple[int, int], int] = []
+    for cell in dead_ends:
+        row, col = cell
+        if maze[row][col] & 1:
+            walls.append((cell, maze[row][col]))
+        if maze[row][col] & 2:
+            walls.append((cell, maze[row][col]))
+        if maze[row][col] & 4:
+            walls.append((cell, maze[row][col]))
+        if maze[row][col] & 8:
+            walls.append((cell, maze[row][col]))
