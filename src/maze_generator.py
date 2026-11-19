@@ -159,7 +159,8 @@ def MazeImperfect(
     walls: list[tuple[int, int], int] = []
     for cell in dead_ends:
         row, col = cell
-        if maze[row][col] & 1:
+        valid_walls = []
+        if maze[row][col] & 1 and row - 1 > 0 and (cell, (row - 1, col)) not in blocked:
             walls.append((cell, maze[row][col]))
         if maze[row][col] & 2:
             walls.append((cell, maze[row][col]))
