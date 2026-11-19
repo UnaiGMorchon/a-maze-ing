@@ -122,6 +122,38 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | Non
                 count += 1
     print("Celdas sin visitar:", count)
 
+    if not config["PERFECT"]:
+        MazeImperfect(config, maze, positions_42, seed)
+
     # Devolver las posiciones que forman el 42.
     return (positions_42)
 
+
+def MazeImperfect(
+        config: dict[str, Any],
+        maze: list[list[int]],
+        pos_42: list[tuple[int, int]],
+        seed: int | None = None
+) -> None:
+    """Rompe paredes del laberinto"""
+    rng: random = random.Random(seed)
+    width: int = config["WIDTH"]
+    height: int = config["HEIGHT"]
+    corners: list[tuple[int, int]] = [
+        (0, 0),
+        (0, width - 1),
+        (height - 1, 0),
+        (height - 1, width - 1)
+    ]
+    blocked: set[tuple[int, int]] = set(pos_42)
+
+    # buscamos los dead_ends
+    dead_ends: list[tuple[int, int]] = []
+    for row in range(height):
+        for col in range(width):
+            # si no esta dentro del 42
+            # y la celda solo tiene una pared abierta, guardamos la posicion
+            if (row, col) not in blocked and maze[row][col] in (7, 11, 13, 14):
+                dead_ends.append((row, col))
+
+    
