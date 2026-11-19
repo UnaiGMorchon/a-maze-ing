@@ -139,12 +139,6 @@ def MazeImperfect(
     rng: random = random.Random(seed)
     width: int = config["WIDTH"]
     height: int = config["HEIGHT"]
-    corners: list[tuple[int, int]] = [
-        (0, 0),
-        (0, width - 1),
-        (height - 1, 0),
-        (height - 1, width - 1)
-    ]
     blocked: set[tuple[int, int]] = set(pos_42)
 
     # buscamos los dead_ends
@@ -156,15 +150,31 @@ def MazeImperfect(
             if (row, col) not in blocked and maze[row][col] in (7, 11, 13, 14):
                 dead_ends.append((row, col))
 
-    walls: list[tuple[int, int], int] = []
+    # buscamos las paredes que se pueden romper
     for cell in dead_ends:
         row, col = cell
-        valid_walls = []
-        if maze[row][col] & 1 and row - 1 > 0 and (cell, (row - 1, col)) not in blocked:
-            walls.append((cell, maze[row][col]))
-        if maze[row][col] & 2:
-            walls.append((cell, maze[row][col]))
-        if maze[row][col] & 4:
-            walls.append((cell, maze[row][col]))
-        if maze[row][col] & 8:
-            walls.append((cell, maze[row][col]))
+        # buscamos las paredes que se pueden romper
+        valid_walls: list[tuple[str, tuple[int, int]]] = []
+        if maze[row][col] & 1 and row - 1 >= 0 and (row - 1, col) not in blocked:
+            valid_walls.append(("north", (row - 1, col)))
+        if maze[row][col] & 2 and col + 1 < width and (row, col + 1) not in blocked:
+            valid_walls.append(("east", (row, col + 1)))
+        if maze[row][col] & 4 and row + 1 < height and (row + 1, col) not in blocked:
+            valid_walls.append(("south", (row + 1, col)))
+        if maze[row][col] & 8 and col - 1 >= 0 and (row, col - 1) not in blocked:
+            valid_walls.append(("west", (row, col - 1)))
+        if valid_walls:
+            direction, neighbor = rng.choice(valid_walls)
+            n_row, n_col = neighbor
+            if direction == "north":
+                maze[row][col] -= 1
+                maze[n_row][n_col] -= 4
+            elif direction == "south":
+                maze[row][col] -= 4
+                maze[n_row][n_col] -= 1
+            elif direction == "east":
+                maze[row][col] -= 2
+                maze[n_row][n_col] -= 8
+            elif direction == "west":
+                maze[row][col] -= 8
+                maze[n_row][n_col] -= 2
