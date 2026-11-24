@@ -19,6 +19,7 @@ VENV = venv
 PIP = $(VENV)/bin/pip
 RUN = $(VENV)/bin/python
 MAIN = a_maze_ing
+CONFIG = config.txt
 
 # ------------------------------------------------------------
 # .PHONY
@@ -52,7 +53,7 @@ install:
 # Ejecuta main.py con el Python del entorno virtual.
 # Cambiar la ruta si el archivo principal está en otro lugar.
 run:
-	$(RUN) -m $(MAIN)
+	$(RUN) -m $(MAIN) $(CONFIG)
 
 # ------------------------------------------------------------
 # DEBUG - Ejecutar el programa con el depurador
@@ -90,7 +91,7 @@ run:
 # (Pdb) p width
 # (Pdb) c
 debug:
-	$(RUN) -m pdb -m $(MAIN)
+	$(RUN) -m pdb -m $(MAIN) $(CONFIG)
 
 # ------------------------------------------------------------
 # LINT - Comprobar estilo y tipos (OBLIGATORIO EN EL SUBJECT)
@@ -123,8 +124,8 @@ debug:
 #
 # Si flake8 falla, Make se detiene antes de ejecutar mypy.
 lint:
-	$(VENV)/bin/flake8 .
-	$(VENV)/bin/mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
+	$(VENV)/bin/flake8 . --extend-exclude=$(VENV)
+	$(VENV)/bin/mypy . --exclude '$(VENV)/' --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 # ------------------------------------------------------------
 # LINT-STRICT - Comprobación más exigente (OPCIONAL)
@@ -136,8 +137,8 @@ lint:
 #
 # Es más exigente que el lint obligatorio.
 lint-strict:
-	$(VENV)/bin/flake8 .
-	$(VENV)/bin/mypy . --strict
+	$(VENV)/bin/flake8 . --extend-exclude=$(VENV)
+	$(VENV)/bin/mypy . --exclude '$(VENV)/' --strict
 
 # ------------------------------------------------------------
 # CLEAN - Eliminar archivos temporales
