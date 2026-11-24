@@ -100,7 +100,7 @@ def MazeGenerator(config: dict[str, Any], maze: list[list[int]], seed: int | Non
         for i in row:
             if not i:
                 count += 1
-    print("Celdas sin visitar:", count)
+    #print("Celdas sin visitar:", count)
 
     if not config["PERFECT"]:
         MazeImperfect(config, maze, positions_42, seed)

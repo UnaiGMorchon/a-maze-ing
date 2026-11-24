@@ -53,7 +53,7 @@ install:
 # Ejecuta main.py con el Python del entorno virtual.
 # Cambiar la ruta si el archivo principal está en otro lugar.
 run:
-	$(RUN) -m $(MAIN) $(CONFIG)
+	@$(RUN) -m $(MAIN) $(CONFIG)
 
 # ------------------------------------------------------------
 # DEBUG - Ejecutar el programa con el depurador
@@ -91,7 +91,7 @@ run:
 # (Pdb) p width
 # (Pdb) c
 debug:
-	$(RUN) -m pdb -m $(MAIN) $(CONFIG)
+	@$(RUN) -m pdb -m $(MAIN) $(CONFIG)
 
 # ------------------------------------------------------------
 # LINT - Comprobar estilo y tipos (OBLIGATORIO EN EL SUBJECT)
