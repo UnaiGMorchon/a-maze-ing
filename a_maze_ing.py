@@ -76,46 +76,53 @@ if __name__ == "__main__":
     color_index = 1
 
     while True:
-        print("1. Re-generate a new maze")
-        print("2. Show / Hide the shortest path")
-        print("3. Rotate the wall colours")
-        print("4. Animation maze")
-        print("5. Animation solve")
-        print("6. Quit")
-        choice = input("choice? (1-6): ")
-        if choice == "1":
-            maze = MazeCreate(config)
-            pos42 = GeneratorMaze(config, maze, seed, False)
-            solve = MazeSolve(config, maze)
-            MazeSave(config, maze, solve)
-            MazeRender(config, maze, pos42, solve, show_solution)
-        elif choice == "2":
-            show_solution = not show_solution
-            MazeRender(config, maze, pos42, solve, show_solution)
-        elif choice == "3":
-            if color_index == 0:
-                StyleColor.wall = StyleColor.nautilus
-                StyleColor.background = StyleColor.nautilus_back_half
-                StyleColor.number_42 = StyleColor.nautilus_dark
-                color_index += 1
-            elif color_index == 1:
-                StyleColor.wall = StyleColor.magratea
-                StyleColor.background = StyleColor.magratea_back_half
-                StyleColor.number_42 = StyleColor.magratea_dark
-                color_index += 1
-            elif color_index == 2:
-                StyleColor.wall = StyleColor.nostromo
-                StyleColor.background = StyleColor.nostromo_back_half
-                StyleColor.number_42 = StyleColor.nostromo_dark
-                color_index = 0
-            MazeRender(config, maze, pos42, solve, show_solution)
-        elif choice == "4":
-            maze = MazeCreate(config)
-            pos42 = GeneratorMaze(config, maze, seed, True)
-            solve = MazeSolve(config, maze)
-            MazeSave(config, maze, solve)
-            MazeRender(config, maze, pos42, solve, show_solution)
-        elif choice == "5":
-            MazeAnimation(config, maze, pos42, solve)
-        elif choice == "6":
-            break
+        try:
+            print("1. Re-generate a new maze")
+            print("2. Show / Hide the shortest path")
+            print("3. Rotate the wall colours")
+            print("4. Animation maze")
+            print("5. Animation solve")
+            print("6. Quit")
+            choice = input("choice? (1-6): ")
+            if choice == "1":
+                maze = MazeCreate(config)
+                pos42 = GeneratorMaze(config, maze, seed, False)
+                solve = MazeSolve(config, maze)
+                MazeSave(config, maze, solve)
+                MazeRender(config, maze, pos42, solve, show_solution)
+            elif choice == "2":
+                show_solution = not show_solution
+                MazeRender(config, maze, pos42, solve, show_solution)
+            elif choice == "3":
+                if color_index == 0:
+                    StyleColor.wall = StyleColor.nautilus
+                    StyleColor.background = StyleColor.nautilus_back_half
+                    StyleColor.number_42 = StyleColor.nautilus_dark
+                    color_index += 1
+                elif color_index == 1:
+                    StyleColor.wall = StyleColor.magratea
+                    StyleColor.background = StyleColor.magratea_back_half
+                    StyleColor.number_42 = StyleColor.magratea_dark
+                    color_index += 1
+                elif color_index == 2:
+                    StyleColor.wall = StyleColor.nostromo
+                    StyleColor.background = StyleColor.nostromo_back_half
+                    StyleColor.number_42 = StyleColor.nostromo_dark
+                    color_index = 0
+                MazeRender(config, maze, pos42, solve, show_solution)
+            elif choice == "4":
+                maze = MazeCreate(config)
+                pos42 = GeneratorMaze(config, maze, seed, True)
+                solve = MazeSolve(config, maze)
+                MazeSave(config, maze, solve)
+                MazeRender(config, maze, pos42, solve, show_solution)
+            elif choice == "5":
+                MazeAnimation(config, maze, pos42, solve)
+            elif choice == "6":
+                break
+        except KeyboardInterrupt:
+            print(f"\nKeyboard interrupt", file=sys.stderr)
+            sys.exit(1)
+        except Exception as error:
+            print(f"Error inesperado: {error}", file=sys.stderr)
+            sys.exit(1)

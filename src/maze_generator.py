@@ -46,7 +46,7 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | Non
     start_row = (height - len(maze_number_42)) // 2
     start_column = (width - len(maze_number_42[0])) // 2
 
-    if len(maze_visited) < len(maze_number_42) or width < len(maze_number_42[0]):
+    if len(maze_visited) < len(maze_number_42) or width < 9:
         print("42 doesn't fit, so generate the maze without that pattern.")
     else:
         # Reservar las celdas que forman el 42.
@@ -122,6 +122,59 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | Non
                 count += 1
     print("Celdas sin visitar:", count)
 
+    if not config["PERFECT"]:
+        MazeImperfect(config, maze, positions_42, seed)
+
     # Devolver las posiciones que forman el 42.
     return (positions_42)
 
+
+def MazeImperfect(
+        config: dict[str, Any],
+        maze: list[list[int]],
+        pos_42: list[tuple[int, int]],
+        seed: int | None = None
+) -> None:
+    """Rompe paredes del laberinto"""
+    rng: random = random.Random(seed)
+    width: int = config["WIDTH"]
+    height: int = config["HEIGHT"]
+    blocked: set[tuple[int, int]] = set(pos_42)
+
+    # buscamos los dead_ends
+    dead_ends: list[tuple[int, int]] = []
+    for row in range(height):
+        for col in range(width):
+            # si no esta dentro del 42
+            # y la celda solo tiene una pared abierta, guardamos la posicion
+            if (row, col) not in blocked and maze[row][col] in (7, 11, 13, 14):
+                dead_ends.append((row, col))
+
+    # buscamos las paredes que se pueden romper
+    for cell in dead_ends:
+        row, col = cell
+        # buscamos las paredes que se pueden romper
+        valid_walls: list[tuple[str, tuple[int, int]]] = []
+        if maze[row][col] & 1 and row - 1 >= 0 and (row - 1, col) not in blocked:
+            valid_walls.append(("north", (row - 1, col)))
+        if maze[row][col] & 2 and col + 1 < width and (row, col + 1) not in blocked:
+            valid_walls.append(("east", (row, col + 1)))
+        if maze[row][col] & 4 and row + 1 < height and (row + 1, col) not in blocked:
+            valid_walls.append(("south", (row + 1, col)))
+        if maze[row][col] & 8 and col - 1 >= 0 and (row, col - 1) not in blocked:
+            valid_walls.append(("west", (row, col - 1)))
+        if valid_walls:
+            direction, neighbor = rng.choice(valid_walls)
+            n_row, n_col = neighbor
+            if direction == "north":
+                maze[row][col] -= 1
+                maze[n_row][n_col] -= 4
+            elif direction == "south":
+                maze[row][col] -= 4
+                maze[n_row][n_col] -= 1
+            elif direction == "east":
+                maze[row][col] -= 2
+                maze[n_row][n_col] -= 8
+            elif direction == "west":
+                maze[row][col] -= 8
+                maze[n_row][n_col] -= 2
