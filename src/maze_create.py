@@ -11,10 +11,10 @@ def MazeCreate(config : dict[str, Any]) -> list[list[int]]:
     height = config["HEIGHT"]
 
     # Construye la matriz del laberinto filas.
-    for j in range(height):
+    for _ in range(height):
         row: list[int] = []  # una fila
         # Añadir celdas con las cuatro paredes cerradas.
-        for i in range(width):
+        for _ in range(width):
             row.append(15)  # creación de celdas a valor 15 todas
         # Añadir la fila completa a la matriz.
         maze.append(row)

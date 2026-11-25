@@ -105,6 +105,9 @@ def MazeGenerator(config: dict[str, Any], maze: list[list[int]], seed: int | Non
     if not config["PERFECT"]:
         MazeImperfect(config, maze, positions_42, seed)
 
+    if not config["PERFECT"]:
+        MazeImperfect(config, maze, positions_42, seed)
+
     # Devolver las posiciones que forman el 42.
     return (positions_42)
 

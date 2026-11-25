@@ -18,6 +18,7 @@ PYTHON = python3
 VENV = venv
 PIP = $(VENV)/bin/pip
 RUN = $(VENV)/bin/python
+CONFIG = config.txt
 MAIN = a_maze_ing
 CONFIG = config.txt
 
