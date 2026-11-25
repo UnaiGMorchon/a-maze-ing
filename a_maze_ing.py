@@ -6,7 +6,7 @@ from src.style import StyleColor
 from typing import Any
 from src.style import StyleColor
 from src.maze_create import MazeCreate
-from src.maze_generator import MazeGenerator
+from src.maze_generator import GeneratorMaze
 from src.maze_render import MazeRender
 from src.maze_export import MazeSave
 from src.maze_solve import MazeSolve
@@ -17,6 +17,7 @@ from src.maze_validate import (
     ValidateArgs,
     ValidateConfig,
 )
+from mazegen import MazeGenerator
 
 
 def ReadConfig(path: str) -> dict[str, Any]:
@@ -52,19 +53,26 @@ if __name__ == "__main__":
         #ShowPosition(config)
 
         # Crear la matriz con todas las paredes cerradas.
-        maze = MazeCreate(config)
+        maze = MazeGenerator(
+            config["WIDTH"],
+            config["HEIGHT"],
+            config["ENTRY"],
+            config["EXIT"],
+            config["OP_FILE"]
+        )
+        maze.maze_create()
         #print("SEED:", seed)
         #print("TIPO:", type(seed))
 
         # Genera los caminos y devuelve las posiciones del 42, que guardas en pos. y semilla
-        pos42 = MazeGenerator(config, maze, seed, False)
+        pos42 = GeneratorMaze(config, maze.grid, seed, False)
 
         # Buscar el camino más corto entre entrada y salida.
-        solve = MazeSolve(config, maze)
+        solve = MazeSolve(config, maze.grid)
         # Guardar el laberinto y su solución en un archivo
-        MazeSave(config, maze, solve)
+        MazeSave(config, maze.grid, solve)
         # Mostrar el laberinto y la solución en la terminal.
-        MazeRender(config, maze, pos42, solve, True) # recibe el laberinto y las posiciones del 42 para poder dibujarlo ademas de la solución.
+        MazeRender(config, maze.grid, pos42, solve, True) # recibe el laberinto y las posiciones del 42 para poder dibujarlo ademas de la solución.
     except (MazeConfigError, ValueError) as error:
         print(f"Error: {error}", file=sys.stderr)
         sys.exit(1)
@@ -86,7 +94,7 @@ if __name__ == "__main__":
             choice = input("choice? (1-6): ")
             if choice == "1":
                 maze = MazeCreate(config)
-                pos42 = MazeGenerator(config, maze, seed, False)
+                pos42 = GeneratorMaze(config, maze, seed, False)
                 solve = MazeSolve(config, maze)
                 MazeSave(config, maze, solve)
                 MazeRender(config, maze, pos42, solve, show_solution)
@@ -112,7 +120,7 @@ if __name__ == "__main__":
                 MazeRender(config, maze, pos42, solve, show_solution)
             elif choice == "4":
                 maze = MazeCreate(config)
-                pos42 = MazeGenerator(config, maze, seed, True)
+                pos42 = GeneratorMaze(config, maze, seed, True)
                 solve = MazeSolve(config, maze)
                 MazeSave(config, maze, solve)
                 MazeRender(config, maze, pos42, solve, show_solution)

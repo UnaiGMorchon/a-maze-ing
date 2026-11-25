@@ -103,7 +103,7 @@ def ValidateConfig(raw: dict[str, str]) -> dict[str, Any]:
         raise MazeConfigError("ENTRY o EXIT no pueden estar en la posiciones del 42")
 
 
-    config["OUTPUT_FILE"] = raw["OUTPUT_FILE"]
+    config["OP_FILE"] = raw["OUTPUT_FILE"]
 
     # SEED es opcional; si está presente debe ser un entero.
     if "SEED" in raw:
