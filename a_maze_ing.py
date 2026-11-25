@@ -58,17 +58,18 @@ if __name__ == "__main__":
             config["HEIGHT"],
             config["ENTRY"],
             config["EXIT"],
-            config["OP_FILE"]
+            config["OP_FILE"],
+            config["PERFECT"]
         )
         maze.maze_create()
         #print("SEED:", seed)
         #print("TIPO:", type(seed))
 
         # Genera los caminos y devuelve las posiciones del 42, que guardas en pos. y semilla
-        pos42 = GeneratorMaze(config, maze.grid, seed, False)
+        pos42 = maze.maze_paths()
 
         # Buscar el camino más corto entre entrada y salida.
-        solve = MazeSolve(config, maze.grid)
+        solve = maze.maze_solve()
         # Guardar el laberinto y su solución en un archivo
         MazeSave(config, maze.grid, solve)
         # Mostrar el laberinto y la solución en la terminal.
