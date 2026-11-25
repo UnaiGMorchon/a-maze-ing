@@ -1,0 +1,74 @@
+# ============================================================
+# PYPROJECT.TOML - A-MAZE-ING
+# ============================================================
+# Archivo de configuración para construir y distribuir
+# el generador de laberintos como un paquete Python.
+#
+# Permite instalar y reutilizar el generador mediante pip
+# desde otros proyectos, sin necesitar toda la aplicación.
+# ============================================================
+
+
+# ------------------------------------------------------------
+# PROJECT - Información del paquete
+# ------------------------------------------------------------
+
+[project]
+
+# Nombre del paquete que se instalará mediante pip.
+name = "mazegen"
+
+# Versión del paquete.
+# Formato: versión mayor, versión menor y corrección.
+version = "1.0.0"
+
+# Breve descripción de la finalidad del paquete.
+description = "Maze generator"
+
+# Licencia GNU GPL versión 3.
+# Permite reutilizar, modificar y distribuir el código
+# respetando las condiciones de la licencia GPL.
+license = "GPL-3.0-or-later"
+
+# Archivo que contiene el texto completo de la licencia.
+license-files = ["LICENSE.md"]
+
+# Versión mínima de Python necesaria para utilizar el paquete.
+requires-python = ">=3.10"
+
+# Dependencias externas necesarias para utilizar el generador.
+# La lista está vacía porque utilizamos módulos de Python
+# como random, typing y time, incluidos en la biblioteca estándar.
+dependencies = []
+
+# Ruta al archivo que contiene la documentación del paquete.
+# Explica cómo instalar, importar y utilizar el generador.
+readme = "mazegen/README.md"
+
+
+# ------------------------------------------------------------
+# BUILD-SYSTEM - Sistema de construcción del paquete
+# ------------------------------------------------------------
+
+[build-system]
+
+# Herramientas necesarias para construir el paquete.
+# Setuptools permite preparar y empaquetar el código Python.
+# La versión 77 admite la sintaxis moderna de la licencia.
+requires = ["setuptools>=77"]
+
+# Backend encargado de transformar el código fuente
+# en un paquete distribuible e instalable mediante pip.
+build-backend = "setuptools.build_meta"
+
+
+# ------------------------------------------------------------
+# SETUPTOOLS - Selección del código que se empaquetará
+# ------------------------------------------------------------
+
+[tool.setuptools]
+
+# Indica qué paquete Python queremos incluir.
+# Solo se empaqueta el código de mazegen, evitando incluir
+# el resto de la aplicación, el entorno virtual y las pruebas.
+packages = ["mazegen"]

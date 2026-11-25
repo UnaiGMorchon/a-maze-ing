@@ -4,10 +4,11 @@ import random
 from typing import Any
 from src.style import StyleColor
 from src.maze_render import MazeRender
+from src.maze_pattern import MazePattern
 import time
 
 
-def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | None = None, maze_animation: bool = False) -> list[tuple[int, int]]:
+def MazeGenerator(config: dict[str, Any], maze: list[list[int]], seed: int | None = None, maze_animation: bool = False) -> list[tuple[int, int]]:
     """ Generador: utilizado DFS para crear los caminos, eliminando paredes. """
     width = config["WIDTH"]
     height = config["HEIGHT"]
@@ -31,34 +32,13 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | Non
     column = initial_cor[0]
     row = initial_cor[1]
 
-    # 1º list contiene las filas, 2º list contiene los valores de cada fila. int representa los números 0 y 1.
-    # Definir el patrón del número 42.
-    maze_number_42: list[list[int]] = []
-    positions_42: list[tuple[int, int]] = []
+    # Obtener las posiciones del patrón 42.
+    positions_42 = MazePattern(config)
 
-    maze_number_42.append([1, 0 ,0, 0, 1, 1, 1])
-    maze_number_42.append([1, 0 ,0, 0, 0, 0, 1])
-    maze_number_42.append([1, 1, 1, 0, 1, 1, 1])
-    maze_number_42.append([0, 0, 1, 0, 1, 0, 0])
-    maze_number_42.append([0, 0, 1, 0, 1, 1 ,1])
+    # Marcar las celdas del 42 como visitadas.
+    for i in positions_42:
+        maze_visited[i[0]][i[1]] = True
 
-    # Calcular la posición central del 42.
-    start_row = (height - len(maze_number_42)) // 2
-    start_column = (width - len(maze_number_42[0])) // 2
-
-    if len(maze_visited) < len(maze_number_42) or width < 9:
-        print("42 doesn't fit, so generate the maze without that pattern.")
-    else:
-        # Reservar las celdas que forman el 42.
-        for row1 in range(len(maze_number_42)):
-            # Recorrer las columnas de cada fila.
-            for column1 in range(len(maze_number_42[0])):
-                # Comprobar si la celda forma parte del 42.
-                if maze_number_42[row1][column1] == 1:
-                    # Marcar la celda como visitada para que DFS no la utilice.
-                    maze_visited[start_row + row1][start_column + column1] = True
-                    # Guardar las coordenadas del 42 dentro del laberinto.
-                    positions_42.append((start_row + row1, start_column + column1))
 
     # Explorar celdas mediante DFS.
     while True:
@@ -120,7 +100,10 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | Non
         for i in row:
             if not i:
                 count += 1
-    print("Celdas sin visitar:", count)
+    #print("Celdas sin visitar:", count)
+
+    if not config["PERFECT"]:
+        MazeImperfect(config, maze, positions_42, seed)
 
     if not config["PERFECT"]:
         MazeImperfect(config, maze, positions_42, seed)

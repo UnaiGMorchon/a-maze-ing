@@ -46,8 +46,8 @@ def MazeSolve(config: dict[str, Any], maze: list[list[int]]) -> str:
 
         # Devolver el camino al llegar a la salida.
         if position == end:  # si es igual a end
-            print("Camino encontrado:", path)
-            print("Número de movimientos:", len(path))
+            #print("Camino encontrado:", path)
+            #print("Número de movimientos:", len(path))
             return (path)
 
         # Comprobar si una pared está abierta y guardamos vecinos

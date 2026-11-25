@@ -3,6 +3,7 @@
 """Validar los argumentos de línea de comandos y el archivo de config."""
 
 from typing import Any
+from src.maze_pattern import MazePattern
 
 # Claves que el archivo de configuración debe incluir obligatoriamente.
 REQUIRED_KEYS = ("WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT")
@@ -94,6 +95,13 @@ def ValidateConfig(raw: dict[str, str]) -> dict[str, Any]:
 
     if config["ENTRY"] == config["EXIT"]:
         raise MazeConfigError("ENTRY y EXIT no pueden ser la misma celda")
+
+    positions_42 = MazePattern(config)
+    entry = config["ENTRY"]
+    exit = config["EXIT"]
+    if (entry[1], entry[0]) in positions_42 or (exit[1], exit[0]) in positions_42:
+        raise MazeConfigError("ENTRY o EXIT no pueden estar en la posiciones del 42")
+
 
     config["OUTPUT_FILE"] = raw["OUTPUT_FILE"]
 
