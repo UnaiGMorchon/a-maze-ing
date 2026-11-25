@@ -8,7 +8,7 @@ from src.maze_pattern import MazePattern
 import time
 
 
-def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | None = None, maze_animation: bool = False) -> list[tuple[int, int]]:
+def MazeGenerator(config: dict[str, Any], maze: list[list[int]], seed: int | None = None, maze_animation: bool = False) -> list[tuple[int, int]]:
     """ Generador: utilizado DFS para crear los caminos, eliminando paredes. """
     width = config["WIDTH"]
     height = config["HEIGHT"]
@@ -100,7 +100,10 @@ def GeneratorMaze(config: dict[str, Any], maze: list[list[int]], seed: int | Non
         for i in row:
             if not i:
                 count += 1
-    print("Celdas sin visitar:", count)
+    #print("Celdas sin visitar:", count)
+
+    if not config["PERFECT"]:
+        MazeImperfect(config, maze, positions_42, seed)
 
     if not config["PERFECT"]:
         MazeImperfect(config, maze, positions_42, seed)
