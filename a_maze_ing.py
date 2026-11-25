@@ -71,7 +71,7 @@ if __name__ == "__main__":
         # Buscar el camino más corto entre entrada y salida.
         solve = maze.maze_solve()
         # Guardar el laberinto y su solución en un archivo
-        MazeSave(config, maze.grid, solve)
+        maze.maze_save()
         # Mostrar el laberinto y la solución en la terminal.
         MazeRender(config, maze.grid, pos42, solve, True) # recibe el laberinto y las posiciones del 42 para poder dibujarlo ademas de la solución.
     except (MazeConfigError, ValueError) as error:

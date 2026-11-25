@@ -3,6 +3,7 @@ import random
 from src.maze_render import MazeRender
 from src.maze_pattern import MazePattern
 import time
+from src.maze_validate import MazeConfigError
 
 class MazeGenerator:
     
@@ -201,7 +202,7 @@ class MazeGenerator:
                     MazeRender(config, self.grid, pos_42, "", False)
                     time.sleep(0.05)  # lapso de tiempo
 
-    def maze_solve(self) -> None:
+    def maze_solve(self) -> str:
         """Busca el camino más corto con el algoritmo BFS. (FIFO (First In, First Out))"""
 
         # Convertir coordenadas (y, x) a (fila, columna).
@@ -273,3 +274,27 @@ class MazeGenerator:
 
         # No existe un camino hasta la salida.
         raise ValueError("No se ha encontrado un camino hasta la salida")
+
+    def maze_save(self) -> None:
+        """Guarda el laberinto y su solución en un archivo."""
+        self.solution = self.maze_solve()
+        try:
+            # Abrir el archivo en modo escritura.
+            with open(self.op_file, "w", encoding="utf-8") as file:
+                # Guardar cada fila del laberinto en hexadecimal.
+                for row in self.grid:
+                    for i in row:
+                        file.write(f"{i:X}")  # :X convierte en hexadecimal
+                    file.write("\n")
+                # Separar la matriz de las coordenadas.
+                file.write("\n")
+                # Guardar la entrada y la salida.
+                file.write(f"{self.entry[0]},{self.entry[1]}\n")
+                file.write(f"{self.exit[0]},{self.exit[1]}\n")
+                # Guardar los movimientos de la solución.
+                file.write(f"{self.solution}\n")
+        except OSError as error:
+            raise MazeConfigError(
+                f"no se puede escribir el archivo de salida "
+                f"'{self.op_file}': {error}"
+            ) from error
