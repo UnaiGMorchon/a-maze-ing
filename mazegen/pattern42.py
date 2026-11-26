@@ -3,7 +3,7 @@
 from typing import Any
 
 
-def MazePattern(config: dict[str, Any]) -> list[tuple[int, int]]:
+def pattern42(config: dict[str, Any]) -> list[tuple[int, int]]:
     width = config["WIDTH"]
     height = config["HEIGHT"]
 

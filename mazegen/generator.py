@@ -1,10 +1,9 @@
 from typing import Any
 import random
-from src.maze_render import MazeRender
-from src.maze_pattern import MazePattern
 import time
-from src.maze_validate import MazeConfigError
-from src.style import StyleColor
+from mazegen.maze_validate import MazeConfigError
+from mazegen.style import StyleColor
+from .pattern42 import pattern42
 
 
 class MazeGenerator:
@@ -70,7 +69,7 @@ class MazeGenerator:
     
         # Obtener las posiciones del patrón 42.
         config = {"WIDTH": self.width, "HEIGHT": self.height}
-        positions_42 = MazePattern(config)
+        positions_42 = pattern42(config)
     
         # Marcar las celdas del 42 como visitadas.
         for i in positions_42:

@@ -2,16 +2,10 @@
 
 """Read the maze configuration and draw its outer border."""
 import sys
-from src.style import StyleColor
+from mazegen.style import StyleColor
 from typing import Any
-from src.style import StyleColor
-from src.maze_create import MazeCreate
-from src.maze_generator import GeneratorMaze
-from src.maze_render import MazeRender
-from src.maze_export import MazeSave
-from src.maze_solve import MazeSolve
-from src.maze_animation import MazeAnimation
-from src.maze_validate import (
+from mazegen.style import StyleColor
+from mazegen.maze_validate import (
     MazeConfigError,
     ParseConfigLines,
     ValidateArgs,
@@ -59,7 +53,8 @@ if __name__ == "__main__":
             config["ENTRY"],
             config["EXIT"],
             config["OP_FILE"],
-            config["PERFECT"]
+            config["PERFECT"],
+            seed
         )
         maze.maze_create()
         #print("SEED:", seed)
