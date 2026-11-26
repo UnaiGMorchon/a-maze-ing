@@ -124,7 +124,8 @@ class MazeGenerator:
                 # Animacion de crear laberinto
                 if maze_animation:
                     print("\033[H\033[J", end="")  # limpio teminal
-                    MazeRender(config, self.grid, positions_42, "", False)
+                    self.solution = ""
+                    self.maze_render(positions_42, False)
                     time.sleep(0.05)  # lapso de tiempo
             else:
                 # Retroceder si no quedan vecinos disponibles.
@@ -184,6 +185,7 @@ class MazeGenerator:
                 valid_walls.append(("south", (row + 1, col)))
             if grid[row][col] & 8 and col - 1 >= 0 and (row, col - 1) not in blocked:
                 valid_walls.append(("west", (row, col - 1)))
+            # quitamos las paredes
             if valid_walls:
                 direction, neighbor = rng.choice(valid_walls)
                 n_row, n_col = neighbor
@@ -201,7 +203,8 @@ class MazeGenerator:
                     grid[n_row][n_col] -= 2
                 if maze_animation:
                     print("\033[H\033[J", end="")  # limpio teminal
-                    MazeRender(config, self.grid, pos_42, "", False)
+                    self.solution = ""
+                    self.maze_render(pos_42, False)
                     time.sleep(0.05)  # lapso de tiempo
 
     def maze_solve(self) -> str:
@@ -406,6 +409,13 @@ class MazeGenerator:
                 print(f"{StyleColor.background}{"  " * 2}{StyleColor.reset}", end="")
         print(f"{StyleColor.wall}{"██"}{StyleColor.reset}", end="")
         print()
+
+    def maze_animation(self, pos42: list[tuple[int, int]]) -> None:
+        """Anima progresivamente la solución del laberinto en la terminal."""
+        for i in range(len(self.solution)):
+            print("\033[H\033[J", end="")  # limppiar la terminal
+            self.maze_render(pos42, True)
+            time.sleep(0.05)
 
     def maze_clean(self) -> None:
         self.solution = None

@@ -99,7 +99,7 @@ if __name__ == "__main__":
                 pos42 = maze.maze_paths()
                 solve = maze.maze_solve()
                 maze.maze_save()
-                maze.maze_render(pos42, show_solution)
+                maze.maze_render(pos42,  show_solution)
             elif choice == "2":
                 show_solution = not show_solution
                 maze.maze_render(pos42, show_solution)
@@ -121,13 +121,14 @@ if __name__ == "__main__":
                     color_index = 0
                 maze.maze_render(pos42, show_solution)
             elif choice == "4":
-                maze = MazeCreate(config)
-                pos42 = GeneratorMaze(config, maze, seed, True)
-                solve = MazeSolve(config, maze)
-                MazeSave(config, maze, solve)
-                MazeRender(config, maze, pos42, solve, show_solution)
+                maze.maze_clean()
+                maze.maze_create()
+                pos42 = maze.maze_paths(True)
+                solve = maze.maze_solve()
+                maze.maze_save()
+                maze.maze_render(pos42, show_solution)
             elif choice == "5":
-                MazeAnimation(config, maze, pos42, solve)
+                maze.maze_animation(pos42)
             elif choice == "6":
                 break
         except KeyboardInterrupt:
