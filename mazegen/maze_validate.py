@@ -102,7 +102,6 @@ def ValidateConfig(raw: dict[str, str]) -> dict[str, Any]:
     if (entry[1], entry[0]) in positions_42 or (exit[1], exit[0]) in positions_42:
         raise MazeConfigError("ENTRY o EXIT no pueden estar en la posiciones del 42")
 
-
     config["OP_FILE"] = raw["OUTPUT_FILE"]
 
     # SEED es opcional; si está presente debe ser un entero.

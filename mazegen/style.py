@@ -2,6 +2,7 @@
 
 """Define the colors used to display the labyrinth in the terminal."""
 
+
 class StyleColor():
     """ANSI color codes for the maze."""
 

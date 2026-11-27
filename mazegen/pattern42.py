@@ -12,11 +12,11 @@ def pattern42(config: dict[str, Any]) -> list[tuple[int, int]]:
     maze_number_42: list[list[int]] = []
     positions_42: list[tuple[int, int]] = []
 
-    maze_number_42.append([1, 0 ,0, 0, 1, 1, 1])
-    maze_number_42.append([1, 0 ,0, 0, 0, 0, 1])
+    maze_number_42.append([1, 0, 0, 0, 1, 1, 1])
+    maze_number_42.append([1, 0, 0, 0, 0, 0, 1])
     maze_number_42.append([1, 1, 1, 0, 1, 1, 1])
     maze_number_42.append([0, 0, 1, 0, 1, 0, 0])
-    maze_number_42.append([0, 0, 1, 0, 1, 1 ,1])
+    maze_number_42.append([0, 0, 1, 0, 1, 1, 1])
 
     # Calcular la posición central del 42.
     start_row = (height - len(maze_number_42)) // 2
@@ -32,5 +32,6 @@ def pattern42(config: dict[str, Any]) -> list[tuple[int, int]]:
                 # Comprobar si la celda forma parte del 42.
                 if maze_number_42[row1][column1] == 1:
                     # Guardar las coordenadas del 42 dentro del laberinto.
-                    positions_42.append((start_row + row1, start_column + column1))
+                    positions_42.append((start_row + row1,
+                                         start_column + column1))
     return positions_42

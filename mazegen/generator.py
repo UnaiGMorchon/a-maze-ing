@@ -7,7 +7,7 @@ from .pattern42 import pattern42
 
 
 class MazeGenerator:
-    
+
     def __init__(
             self,
             width: int,
@@ -45,55 +45,54 @@ class MazeGenerator:
             maze.append(row)
         self.grid = maze
 
-    def maze_paths(self, maze_animation: bool = False) -> list[tuple[int, int]]:
+    def maze_paths(
+            self, maze_animation: bool = False
+    ) -> list[tuple[int, int]]:
         """ Generador: utilizado DFS para crear los caminos, eliminando paredes. """
         stack: list[tuple[int, int]] = []  # posiciones guardadas
-    
+
         rng = random.Random(self.seed)  # seed la semilla elegimos 42 por defecto siempre saldra el mismo laberinto
-    
+
         # Crear una matriz para controlar las celdas visitadas.
         maze_visited: list[list[bool]] = []
-    
+
         # matiz de visita celda true o false
         for row in range(self.height):
             maze_bool: list[bool] = []  # crea fila vacia
             for column in range(self.width):  # añado un False por cada columna de la fila actual
                 maze_bool.append(False)
             maze_visited.append(maze_bool)  # añades la fila completa a la matriz
-    
+
         # Marcar la entrada como visitada.
         initial_cor = self.entry
         maze_visited[initial_cor[1]][initial_cor[0]] = True
         column = initial_cor[0]
         row = initial_cor[1]
-    
+
         # Obtener las posiciones del patrón 42.
         config = {"WIDTH": self.width, "HEIGHT": self.height}
         positions_42 = pattern42(config)
-    
+
         # Marcar las celdas del 42 como visitadas.
         for i in positions_42:
             maze_visited[i[0]][i[1]] = True
-    
-    
+
         # Explorar celdas mediante DFS.
         while True:
             neighbors: list[str] = []  # lista de vecinos
             # Buscar vecinos dentro del laberinto y no visitados.
             # verificar si estoy dentro del laberinto y guardo sus direcciones
-            if row < self.height -1 and not maze_visited[row + 1][column]:  # sur
+            if row < self.height - 1 and not maze_visited[row + 1][column]:  # sur
                 neighbors.append("south")  # guardo el sentido sur
-    
+
             if row > 0 and not maze_visited[row - 1][column]:  # norte
                 neighbors.append("north")  # guardo el sentido norte
-    
-            if column < self.width -1 and not maze_visited[row][column + 1]:  # este
+
+            if column < self.width - 1 and not maze_visited[row][column + 1]:  # este
                 neighbors.append("east")  # guardo el sentido este
-    
+
             if column > 0 and not maze_visited[row][column - 1]:  # oeste
                 neighbors.append("west")  # guardo el sentido oeste
-    
-            
             # lista de vecinos disponibles neighbors
             if len(neighbors) > 0:  # que tenga al menos 1
                 # Elegir un vecino y guardar la posición actual.
@@ -137,14 +136,13 @@ class MazeGenerator:
             for i in row:
                 if not i:
                     count += 1
-        #print("Celdas sin visitar:", count)
-    
+
         if not self.is_perfect:
             self.make_imperfect(
                 config, self.grid, positions_42,
                 maze_animation, self.seed
                 )
-    
+
         # Devolver las posiciones que forman el 42.
         return (positions_42)
 
@@ -155,7 +153,7 @@ class MazeGenerator:
         pos_42: list[tuple[int, int]],
         maze_animation: bool = False,
         seed: int | None = None
-        ) -> None:
+    ) -> None:
         """Rompe paredes del laberinto"""
         rng: random = random.Random(seed)
         width: int = config["WIDTH"]
@@ -228,9 +226,9 @@ class MazeGenerator:
         # Cola de posiciones pendientes y caminos recorridos.
         queue: list[tuple[tuple[int, int], str]] = [(start, "")]  # cola con la posición inicial (start) first in, first out bfs
         # Celdas ya descubiertas
-        visited : list[tuple[int, int]]= []  # recuerda las celdas ya descubiertas
+        visited: list[tuple[int, int]] = []  # recuerda las celdas ya descubiertas
         visited.append(start)  # append agregar la primera posición
-    
+
         while queue:
             # Cada celda tiene sus propios vecinos
             neighbours: list[tuple[tuple[int, int], str]] = []  # guarda las celdas vecinas accesibles desde una posición
@@ -251,7 +249,7 @@ class MazeGenerator:
 
             # Comprobar si una pared está abierta y guardamos vecinos
             if not (self.grid[row][column] & 2):  # Guarda las coordenadas del vecino y la dirección.
-                if column < self.width -1:
+                if column < self.width - 1:
                     neighbours.append(((row, column + 1), "E"))  # Guardar las coordenadas de los vecinos a los que podemos avanzar + E.
                 #print("Podemos avanzar hacia el ESTE")
 
@@ -261,7 +259,7 @@ class MazeGenerator:
                     #print("Podemos avanzar hacia el NORTE")
 
             if not (self.grid[row][column] & 4):
-                if row < self.height -1:
+                if row < self.height - 1:
                     neighbours.append(((row + 1, column), "S"))
                     #print("Podemos avanzar hacia el SUR")
 
@@ -303,7 +301,11 @@ class MazeGenerator:
                 f"'{self.op_file}': {error}"
             ) from error
 
-    def maze_render(self, pos42: list[tuple[int, int]], show_solution: bool = True) -> None:
+    def maze_render(
+            self,
+            pos42: list[tuple[int, int]],
+            show_solution: bool = True
+    ) -> None:
         """Dibuja el laberinto y su solución en la terminal."""
 
         # Convertir los movimientos de la solución(solve (ESNWSENW)) en coordenadas.
@@ -324,7 +326,7 @@ class MazeGenerator:
                     draw_north.append((row + 1, column))  # Abertura norte de la celda anterior.
                 # Avanzar hacia el sur.
                 if i == "S":
-                    row +=1   # Bajar una fila.
+                    row += 1   # Bajar una fila.
                     draw_line.append((row, column))
                     draw_north.append((row, column))  # Abertura norte de la celda actual.
                 # Avanzar hacia el este.
@@ -334,7 +336,7 @@ class MazeGenerator:
                     draw_west.append((row, column))  # Abertura oeste de la celda actual.
                 # Avanzar hacia el oeste.
                 if i == "W":
-                    column -=1  # Mover una columna a la izquierda.
+                    column -= 1  # Mover una columna a la izquierda.
                     draw_line.append((row, column))
                     draw_west.append((row, column + 1))  # Abertura oeste de la celda anterior.
 
@@ -351,7 +353,7 @@ class MazeGenerator:
 
                 # Dibujar la pared o el paso NORTE.
                 if (row, column) in pos42:
-                    print(f"{StyleColor.number_42}{"██"* 1}{StyleColor.reset}", end="")
+                    print(f"{StyleColor.number_42}{"██" * 1}{StyleColor.reset}", end="")
                 elif self.grid[row][column] & 1:
                     print(f"{StyleColor.wall}{"██" * 1}{StyleColor.reset}", end="")  # 6 caracteres
                 # Pintar los pasos verticales de la solución.
@@ -379,7 +381,7 @@ class MazeGenerator:
                         print(f"{StyleColor.background}{"  "}{StyleColor.reset}", end="")
 
                     # Dibujar el interior de cada celda.
-                    if (column , row) ==  self.exit:
+                    if (column, row) == self.exit:
                         print(f"{StyleColor.red}{"██" * 1}{StyleColor.reset}", end="")
                     elif (column, row) == self.entry:
                         print(f"{StyleColor.green}{"██" * 1}{StyleColor.reset}", end="")
@@ -388,13 +390,11 @@ class MazeGenerator:
                     # dibujo de la linea
                     elif (row, column) in draw_line:
                         print(f"{StyleColor.solve}{"██"}{StyleColor.reset}", end="")
-                    #elif i == 0:
-                    #    print(f"{StyleColor.background}{maze[row][column]:^2}{StyleColor.reset}", end="")
                     else:
                         print(f"{StyleColor.background}{"  " * 1}{StyleColor.reset}", end="")
 
                 # Dibujamos Pared ESTE de la última celda del laberinto.
-                if self.grid[row][self.width -1] & 2:
+                if self.grid[row][self.width - 1] & 2:
                     print(f"{StyleColor.wall}{"██"}{StyleColor.reset}", end="")
                 else:
                     print(f"{StyleColor.background}{"  "}{StyleColor.reset}", end="")

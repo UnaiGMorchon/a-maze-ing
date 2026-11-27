@@ -4,7 +4,6 @@
 import sys
 from mazegen.style import StyleColor
 from typing import Any
-from mazegen.style import StyleColor
 from mazegen.maze_validate import (
     MazeConfigError,
     ParseConfigLines,
@@ -76,7 +75,7 @@ if __name__ == "__main__":
         print(f"Error inesperado: {error}", file=sys.stderr)
         sys.exit(1)
 
-    show_solution= True
+    show_solution = True
     color_index = 1
 
     while True:
@@ -127,7 +126,7 @@ if __name__ == "__main__":
             elif choice == "6":
                 break
         except KeyboardInterrupt:
-            print(f"\nKeyboard interrupt", file=sys.stderr)
+            print("\nKeyboard interrupt", file=sys.stderr)
             sys.exit(1)
         except Exception as error:
             print(f"Error inesperado: {error}", file=sys.stderr)
