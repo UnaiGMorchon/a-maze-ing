@@ -67,7 +67,7 @@ if __name__ == "__main__":
         # Guardar el laberinto y su solución en un archivo
         maze.maze_save()
         # Mostrar el laberinto y la solución en la terminal.
-        maze.maze_render(pos42, True) # recibe el laberinto y las posiciones del 42 para poder dibujarlo ademas de la solución.
+        maze.maze_render(pos42, solve, True) # recibe el laberinto y las posiciones del 42 para poder dibujarlo ademas de la solución.
     except (MazeConfigError, ValueError) as error:
         print(f"Error: {error}", file=sys.stderr)
         sys.exit(1)
@@ -93,10 +93,10 @@ if __name__ == "__main__":
                 pos42 = maze.maze_paths()
                 solve = maze.maze_solve()
                 maze.maze_save()
-                maze.maze_render(pos42,  show_solution)
+                maze.maze_render(pos42, solve, show_solution)
             elif choice == "2":
                 show_solution = not show_solution
-                maze.maze_render(pos42, show_solution)
+                maze.maze_render(pos42, solve, show_solution)
             elif choice == "3":
                 if color_index == 0:
                     StyleColor.wall = StyleColor.nautilus
@@ -113,16 +113,17 @@ if __name__ == "__main__":
                     StyleColor.background = StyleColor.nostromo_back_half
                     StyleColor.number_42 = StyleColor.nostromo_dark
                     color_index = 0
-                maze.maze_render(pos42, show_solution)
+                maze.maze_render(pos42, solve, show_solution)
             elif choice == "4":
                 maze.maze_clean()
                 maze.maze_create()
                 pos42 = maze.maze_paths(True)
                 solve = maze.maze_solve()
                 maze.maze_save()
-                maze.maze_render(pos42, show_solution)
+                maze.maze_render(pos42, solve, show_solution)
             elif choice == "5":
                 maze.maze_animation(pos42)
+                show_solution = True
             elif choice == "6":
                 break
         except KeyboardInterrupt:

@@ -122,8 +122,7 @@ class MazeGenerator:
                 # Animacion de crear laberinto
                 if maze_animation:
                     print("\033[H\033[J", end="")  # limpio teminal
-                    self.solution = ""
-                    self.maze_render(positions_42, False)
+                    self.maze_render(positions_42, "", False)
                     time.sleep(0.05)  # lapso de tiempo
             else:
                 # Retroceder si no quedan vecinos disponibles.
@@ -200,8 +199,7 @@ class MazeGenerator:
                     grid[n_row][n_col] -= 2
                 if maze_animation:
                     print("\033[H\033[J", end="")  # limpio teminal
-                    self.solution = ""
-                    self.maze_render(pos_42, False)
+                    self.maze_render(pos_42, "", False)
                     time.sleep(0.05)  # lapso de tiempo
 
     def maze_solve(self) -> str:
@@ -304,6 +302,7 @@ class MazeGenerator:
     def maze_render(
             self,
             pos42: list[tuple[int, int]],
+            solve: str,
             show_solution: bool = True
     ) -> None:
         """Dibuja el laberinto y su solución en la terminal."""
@@ -318,7 +317,7 @@ class MazeGenerator:
             draw_line.append((self.entry[1], self.entry[0]))
             row, column = draw_line[0]  # Obtener las coordenadas iniciales.
             # Recorrer los movimientos de la solución.
-            for i in self.solution:
+            for i in solve:
                 # Avanzar hacia el norte.
                 if i == "N":
                     row -= 1  # Subir una fila.
@@ -413,7 +412,7 @@ class MazeGenerator:
         """Anima progresivamente la solución del laberinto en la terminal."""
         for i in range(len(self.solution)):
             print("\033[H\033[J", end="")  # limppiar la terminal
-            self.maze_render(pos42, True)
+            self.maze_render(pos42, self.solution[:i + 1], True)
             time.sleep(0.05)
 
     def maze_clean(self) -> None:
